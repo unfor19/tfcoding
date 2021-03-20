@@ -16,15 +16,25 @@ jobs:
     strategy:
       matrix:
         include:
-          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:latest"
+          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.12.30"
             DOCKERFILE_PATH: Dockerfile
+            TERRAFORM_VERSION: "0.12.30"
+          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.13.6"
+            DOCKERFILE_PATH: Dockerfile
+            TERRAFORM_VERSION: "0.13.6"
+          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.14.8"
+            DOCKERFILE_PATH: Dockerfile
+            TERRAFORM_VERSION: "0.14.8"
+          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.15.0-beta2"
+            DOCKERFILE_PATH: Dockerfile
+            TERRAFORM_VERSION: "0.15.0-beta2"
     steps:
       - uses: actions/checkout@v2
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v3.x
       - name: Set env vars
         run: |
-          export TERRAFORM_VERSION="$( echo ${GITHUB_REF_SLUG} | cut -d'f' -f 2)"
+          export TERRAFORM_VERSION="${{ matrix.TERRAFORM_VERSION }}"
           echo "TERRAFORM_VERSION=${TERRAFORM_VERSION}" >> $GITHUB_ENV
       - name: docker login ghcr
         run: |
@@ -64,9 +74,22 @@ jobs:
     strategy:
       matrix:
         include:
-          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:latest"
+          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.12.30"
             DOCKERFILE_PATH: Dockerfile
-            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding"
+            TERRAFORM_VERSION: "0.12.30"
+            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.12.30"
+          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.13.6"
+            DOCKERFILE_PATH: Dockerfile
+            TERRAFORM_VERSION: "0.13.6"
+            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.13.6"
+          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.14.8"
+            DOCKERFILE_PATH: Dockerfile
+            TERRAFORM_VERSION: "0.14.8"
+            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.14.8"
+          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.15.0-beta2"
+            DOCKERFILE_PATH: Dockerfile
+            TERRAFORM_VERSION: "0.15.0-beta2"
+            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.15.0-beta2"
     steps:
       - uses: actions/checkout@v2
       - name: Inject slug/short variables
@@ -74,9 +97,9 @@ jobs:
       - name: Set env vars
         run: |
           export RELEASE_VERSION=${GITHUB_REF_SLUG}
-          export DOCKERHUB_TAG="${{ matrix.DOCKERHUB_TAG_PREFIX }}:${RELEASE_VERSION}"
+          export DOCKERHUB_TAG="${{ matrix.DOCKERHUB_TAG_PREFIX }}-${RELEASE_VERSION}"
           echo "DOCKERHUB_TAG=${DOCKERHUB_TAG}" >> $GITHUB_ENV
-          export TERRAFORM_VERSION="$( echo ${GITHUB_REF_SLUG} | cut -d'f' -f 2)"
+          export TERRAFORM_VERSION="${{ matrix.TERRAFORM_VERSION }}"
           echo "TERRAFORM_VERSION=${TERRAFORM_VERSION}" >> $GITHUB_ENV
       - name: docker pull cached from ghcr
         run: |
