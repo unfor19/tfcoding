@@ -5,7 +5,7 @@ set -o pipefail
 error_msg(){
     local msg=$1
     echo -e "[ERROR] $msg"
-    exit
+    exit 1
 }
 
 should(){
