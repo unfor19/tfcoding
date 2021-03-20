@@ -91,7 +91,7 @@ debug_mode(){
 render_tfcoding(){
   # terraform apply renders the outputs
   terraform apply -auto-approve 1>/dev/null
-  terraform output -json | jq 'del(.[] .sensitive, .[] .type) | map_values(.value)'
+  terraform output -json | jq 'map_values(.value)'
 }
 
 
