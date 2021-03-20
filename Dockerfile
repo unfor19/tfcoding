@@ -1,3 +1,4 @@
+ARG ALPINE_VERSION="3.13"
 ARG TERRAFORM_VERSION="0.13.5"
 ARG HCL2JSON_VERSION="v0.3.2"
 ARG APP_USER_NAME="appuser"
@@ -5,7 +6,7 @@ ARG APP_USER_ID="1000"
 ARG APP_GROUP_NAME="appgroup"
 ARG APP_GROUP_ID="1000"
 
-FROM alpine:3.12 as download
+FROM alpine:${ALPINE_VERSION} as download
 ARG TERRAFORM_VERSION
 ARG HCL2JSON_VERSION
 
@@ -16,7 +17,7 @@ RUN unzip terraform.zip && rm terraform.zip
 RUN curl -sL -o hcl2json "https://github.com/tmccombs/hcl2json/releases/download/${HCL2JSON_VERSION}/hcl2json_linux_amd64" && chmod +x hcl2json
 
 
-FROM alpine:3.13 as app
+FROM alpine:${ALPINE_VERSION} as app
 ARG APP_USER_NAME="appuser"
 ARG APP_USER_ID="1000"
 ARG APP_GROUP_NAME="appgroup"
