@@ -20,6 +20,12 @@ jobs:
             DOCKERFILE_PATH: Dockerfile
     steps:
       - uses: actions/checkout@v2
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+      - name: Set env vars
+        run: |
+          export TERRAFORM_VERSION="$( echo ${GITHUB_REF_SLUG} | cut -d'f' -f 2)"
+          echo "TERRAFORM_VERSION=${TERRAFORM_VERSION}" >> $GITHUB_ENV
       - name: docker login ghcr
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
@@ -33,7 +39,8 @@ jobs:
             --cache-from="${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_BASE}" \
             -f "${{ matrix.DOCKERFILE_PATH }}" \
             --target "${TARGET_BASE}" \
-            --build-arg BUILDKIT_INLINE_CACHE=1
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            --build-arg TERRAFORM_VERSION="$TERRAFORM_VERSION"
           docker build . -t "cached-${TARGET_APP}" \
             --cache-from="${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_APP}" \
             -f "${{ matrix.DOCKERFILE_PATH }}" \
@@ -69,6 +76,8 @@ jobs:
           export RELEASE_VERSION=${GITHUB_REF_SLUG}
           export DOCKERHUB_TAG="${{ matrix.DOCKERHUB_TAG_PREFIX }}:${RELEASE_VERSION}"
           echo "DOCKERHUB_TAG=${DOCKERHUB_TAG}" >> $GITHUB_ENV
+          export TERRAFORM_VERSION="$( echo ${GITHUB_REF_SLUG} | cut -d'f' -f 2)"
+          echo "TERRAFORM_VERSION=${TERRAFORM_VERSION}" >> $GITHUB_ENV
       - name: docker pull cached from ghcr
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
@@ -80,7 +89,8 @@ jobs:
             --cache-from "${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_BASE}" \
             --cache-from "${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_APP}" \
             -f "${{ matrix.DOCKERFILE_PATH }}" \
-            --target "${TARGET_APP}"
+            --target "${TARGET_APP}" \
+            --build-arg TERRAFORM_VERSION="$TERRAFORM_VERSION"
       - name: test docker image
         run: |
           ./scripts/tests.sh
