@@ -18,6 +18,9 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build . --file Dockerfile --tag "${DOCKER_TAG}"
+      - name: Test Docker Image
+        run: |
+          bash scripts/tests.sh
       - name: Push to DockerHub
         run: |
           echo '${{ secrets.DOCKER_PASSWORD }}' | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
