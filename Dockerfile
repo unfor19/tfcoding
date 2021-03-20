@@ -23,7 +23,7 @@ ARG APP_USER_ID="1000"
 ARG APP_GROUP_NAME="appgroup"
 ARG APP_GROUP_ID="1000"
 
-RUN apk add --no-cache bash jq perl inotify-tools
+RUN apk add --no-cache bash jq inotify-tools
 COPY --from=download /downloads/terraform /usr/local/bin/terraform
 COPY --from=download /downloads/hcl2json /usr/local/bin/hcl2json
 

@@ -90,9 +90,8 @@ debug_mode(){
 
 render_tfcoding(){
   # terraform apply renders the outputs
-  # perl removes all strings from start to "Outputs:"
-  # hcl2json | jq - pretty formatting
-  terraform apply -auto-approve -no-color | perl -p0e 's/.*Outputs:.*\n\n//s' | hcl2json | jq
+  terraform apply -auto-approve 1>/dev/null
+  terraform output -json | jq 'del(.[] .sensitive, .[] .type) | map_values(.value)'
 }
 
 
@@ -120,5 +119,3 @@ else
   # Run-once
   main
 fi
-
-
