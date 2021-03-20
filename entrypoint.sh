@@ -20,6 +20,16 @@ error_msg(){
 }
 
 
+validation(){
+  # [[ -d "$_SRC_DIR_ABSOLUTE_PATH" ]] && error_msg "Directory does not exist - $_SRC_DIR_ABSOLUTE_PATH"
+  if [[ -d "$_SRC_DIR_ABSOLUTE_PATH" ]]; then
+  :
+  else
+    error_msg "Directory does not exist - $_SRC_DIR_ABSOLUTE_PATH"
+  fi
+}
+
+
 copy_files(){
   # Copy relevant files from /src/ to /code/ dir
   rm -rf /code/*
@@ -67,6 +77,7 @@ render_tfcoding(){
 
 
 # Main
+validation
 copy_files
 terraform_init
 inject_outputs
