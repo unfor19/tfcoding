@@ -39,4 +39,5 @@ tfcoding(){
 # Tests
 should pass "Basic Example" "tfcoding examples/basic"
 should pass "Complex Example" "tfcoding examples/basic"
+should pass "No arguments provided - Uses the last tfcoding.tf that was found" "tfcoding"
 should fail "Non existing dir" "tfcoding examples/non-existing-dir"
