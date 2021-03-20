@@ -8,7 +8,7 @@ Speed up development cycle when using terraform's [expressions](https://www.terr
 
 ## Usage
 
-Create the file `tfcoding.tf`, this file contains the code that will be rendered.
+**Create the file `tfcoding.tf**- this file contains the code that will be rendered.
 
 **IMPORTANT**: Currently supports Variables and Local Values, does not work when referencing to Resources and Modules.
 
@@ -35,7 +35,7 @@ locals {
 }
 ```
 
-Render the local values by mounting the source code in read-only mode.
+**Render the local values** by mounting the source code in read-only mode.
 
 **IMPORTANT**: mounting to `/src/` is mandatory and using `:ro` is safer
 
