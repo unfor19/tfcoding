@@ -39,7 +39,7 @@ locals {
 
 ### Render the local values
 
-Mount the source code directory in read-only to `/src/` mode and provide a relative path from `$PWD` to a directory that contains `tfcoding.tf`. 
+Mount the source code directory to `/src/` (read-only) and provide a relative path from `$PWD` to a directory that contains `tfcoding.tf`.
 
 ```bash
 $ git clone https://github.com/unfor19/tfcoding.git
