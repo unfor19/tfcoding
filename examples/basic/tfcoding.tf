@@ -3,7 +3,7 @@ variable "environment" {
 }
 
 variable "cidr_ab" {
-  type = map
+  type = map(string)
   default = {
     "dev": "10.10"
     "stg": "10.11"
