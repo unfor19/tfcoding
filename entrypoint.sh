@@ -47,12 +47,6 @@ validation(){
   else
     error_msg "Directory does not exist - $_SRC_DIR_ABSOLUTE_PATH"
   fi
-
-  if [[ -f "${_SRC_DIR_ABSOLUTE_PATH}/${_CODE_FILE_NAME}" ]]; then
-    :
-  else
-    error_msg "Missing $_CODE_FILE_NAME in: $_SRC_DIR_ABSOLUTE_PATH/${_CODE_FILE_NAME}"
-  fi
 }
 
 
