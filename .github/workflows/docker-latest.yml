@@ -47,6 +47,8 @@ jobs:
           docker tag "cached-${TARGET_BASE}" "${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_BASE}"
           docker tag "cached-${TARGET_APP}"  "${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_APP}"
       - name: docker push cached to ghcr
+        env:
+          GITHUB_TOKEN: "${{ secrets.GHTOKEN_PUSH_PKG }}"
         run: |
           docker push "${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_BASE}"
           docker push "${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_APP}"
