@@ -1,5 +1,7 @@
 # tfcoding
 
+[![Push latest version to DockerHub](https://github.com/unfor19/tfcoding/actions/workflows/docker-latest.yml/badge.svg)](https://github.com/unfor19/tfcoding/actions/workflows/docker-latest.yml)
+
 Speed up development cycle when using terraform's [expressions](https://www.terraform.io/docs/language/expressions/index.html) and [functions](https://www.terraform.io/docs/language/functions/index.html) by rendering [local values](https://www.terraform.io/docs/language/values/locals.html). This app attempts to imitate the behavior of the [helm template](https://helm.sh/docs/helm/helm_template/) command on terraform's local values.
 
 ## Requirements
