@@ -10,9 +10,9 @@ Speed up development cycle when using terraform's [Expressions](https://www.terr
 
 ## Usage
 
-**Create the file tfcoding.tf** - this file contains the code that will be rendered.
+### Create the file tfcoding.tf
 
-**IMPORTANT**: Currently supports Variables and Local Values, does not work when referencing to Resources and Modules.
+This file contains the code that will be rendered. Currently supports Variables and Local Values, does not work when referencing to Resources and Modules.
 
 ```go
 variable "environment" {
@@ -37,15 +37,26 @@ locals {
 }
 ```
 
-**Render the local values** by mounting the source code in read-only mode.
+### Render the local values
 
-**IMPORTANT**: mounting to `/src/` is mandatory and using `:ro` is safer.
+Mount the source code directory in read-only to `/src/` mode and provide a relative path from `$PWD` to a directory that contains `tfcoding.tf`. 
 
 ```bash
-# Set the relative path from PWD to a directory that contains tfcoding.tf
+$ git clone https://github.com/unfor19/tfcoding.git
+$ cd tfcoding
 $ RELATIVE_PATH="examples/basic"
 $ docker run --rm -it -v "${PWD}"/:/src/:ro \
   unfor19/tfcoding "$RELATIVE_PATH"
+
+# Output:
+{
+  "cidr_ab": 10.11,
+  "private_subnets": [
+    "10.11.0.0/24",
+    "10.11.1.0/24"
+  ]
+}
+
 # To see a more complicated example change basic to complex
 ```
 
