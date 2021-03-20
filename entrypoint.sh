@@ -2,6 +2,14 @@
 set -e
 set -o pipefail
 
+
+# trap ctrl-c and call ctrl_c()
+trap ctrl_c INT
+ctrl_c() {
+    echo "Stopped"
+    exit 0
+}
+
 # Global variables
 _CODE_FILE_NAME="tfcoding.tf"
 _SRC_DIR_ROOT="/src"
@@ -10,8 +18,8 @@ _SRC_DIR_RELATIVE_PATH="${_SRC_DIR_RELATIVE_PATH:-"$_ROOT_DIR"}"
 _SRC_DIR_ABSOLUTE_PATH="${_SRC_DIR_ROOT}/${_SRC_DIR_RELATIVE_PATH}"
 _CODE_DIR_ROOT="/code"
 
+_LOGGING="${LOGGING:-"true"}"
 _DEBUG="${DEBUG:-"false"}"
-_LOGGING="${LOGGING:-"false"}"
 
 # Valid values: true or watch
 _WATCHING="${2:-"$WATCHING"}"
@@ -22,14 +30,14 @@ _WATCHING="${_WATCHING:-"false"}"
 # Functions
 error_msg(){
   local msg="$1"
-  echo -e "[ERROR] $msg"
+  echo -e "[ERROR] $(date) :: $msg"
   exit 1
 }
 
 
 log_msg(){
   local msg="$1"
-  echo -e "[LOG] $msg"
+  echo -e "[LOG] $(date) :: $msg"
 }
 
 
@@ -106,12 +114,12 @@ main(){
 
 if [[ "$_WATCHING" = "true" ]] ; then
   # Execute on file change in source dir
-  log_msg "Rendered:"
+  log_msg "Rendered for the first time"
   main
-  [[ "$_LOGGING" = "true" ]] && log_msg "Watching for changes in: $_SRC_DIR_ABSOLUTE_PATH"
+  [[ "$_LOGGING" = "true" ]] && log_msg "Watching for changes in $_SRC_DIR_ABSOLUTE_PATH"
   inotifywait -qrmc --event close_write "$_SRC_DIR_ABSOLUTE_PATH" |
-    while read dir action file; do
-        [[ "$_LOGGING" = "true" ]] && log_msg "Modified $file, rendered:"
+    while read -r dir action file; do
+        [[ "$_LOGGING" = "true" ]] && log_msg "Rendered"
         main
     done
 else

@@ -46,9 +46,9 @@ $ git clone https://github.com/unfor19/tfcoding.git
 $ cd tfcoding
 $ RELATIVE_PATH="examples/basic"
 $ docker run --rm -it -v "${PWD}"/:/src/:ro \
-  unfor19/tfcoding "$RELATIVE_PATH"
+  unfor19/tfcoding "$RELATIVE_PATH" watch
 
-# Output:
+# Output - auto-updates on changes in /src/$RELATIVE_PATH
 {
   "cidr_ab": 10.11,
   "private_subnets": [
@@ -57,6 +57,7 @@ $ docker run --rm -it -v "${PWD}"/:/src/:ro \
   ]
 }
 
+# Hit CTRL+C to stop the app (container)
 # To see a more complicated example change basic to complex
 ```
 
