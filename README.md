@@ -2,7 +2,7 @@
 
 [![Push latest version to DockerHub](https://github.com/unfor19/tfcoding/actions/workflows/docker-latest.yml/badge.svg)](https://github.com/unfor19/tfcoding/actions/workflows/docker-latest.yml) [![Dockerhub pulls](https://img.shields.io/docker/pulls/unfor19/tfcoding)](https://hub.docker.com/r/unfor19/tfcoding)
 
-Speed up development cycle when using terraform's [expressions](https://www.terraform.io/docs/language/expressions/index.html) and [functions](https://www.terraform.io/docs/language/functions/index.html) by rendering [local values](https://www.terraform.io/docs/language/values/locals.html). This app attempts to imitate the behavior of the [helm template](https://helm.sh/docs/helm/helm_template/) command on terraform's local values.
+Speed up development cycle when using terraform's [Expressions](https://www.terraform.io/docs/language/expressions/index.html) and [Functions](https://www.terraform.io/docs/language/functions/index.html) by rendering [Local Values](https://www.terraform.io/docs/language/values/locals.html). This app attempts to imitate the behavior of the [helm template](https://helm.sh/docs/helm/helm_template/) command on terraform's local values.
 
 ## Requirements
 
@@ -10,7 +10,7 @@ Speed up development cycle when using terraform's [expressions](https://www.terr
 
 ## Usage
 
-**Create the file `tfcoding.tf**- this file contains the code that will be rendered.
+**Create the file tfcoding.tf** - this file contains the code that will be rendered.
 
 **IMPORTANT**: Currently supports Variables and Local Values, does not work when referencing to Resources and Modules.
 
@@ -39,7 +39,7 @@ locals {
 
 **Render the local values** by mounting the source code in read-only mode.
 
-**IMPORTANT**: mounting to `/src/` is mandatory and using `:ro` is safer
+**IMPORTANT**: mounting to `/src/` is mandatory and using `:ro` is safer.
 
 ```bash
 # Set the relative path from PWD to a directory that contains tfcoding.tf
