@@ -32,7 +32,7 @@ should(){
 
 tfcoding(){
     local relative_path="$1"
-    docker run --rm -it -v "${PWD}"/:/src/:ro \
+    docker run --rm -t -v "${PWD}"/:/src/:ro \
         unfor19/tfcoding "$relative_path"
 }
 
