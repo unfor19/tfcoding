@@ -4,28 +4,46 @@ set -o pipefail
 
 # Global variables
 _CODE_FILE_NAME="tfcoding.tf"
-_DEBUG=${DEBUG:-"false"}
 _SRC_DIR_ROOT="/src"
 _SRC_DIR_RELATIVE_PATH="${1:-"$RELATIVE_PATH"}"
 _SRC_DIR_RELATIVE_PATH="${_SRC_DIR_RELATIVE_PATH:-"$_ROOT_DIR"}"
 _SRC_DIR_ABSOLUTE_PATH="${_SRC_DIR_ROOT}/${_SRC_DIR_RELATIVE_PATH}"
 _CODE_DIR_ROOT="/code"
 
+_DEBUG="${DEBUG:-"false"}"
+_LOGGING="${LOGGING:-"false"}"
+
+# Valid values: true or watch
+_WATCHING="${2:-"$WATCHING"}"
+_WATCHING="${_WATCHING:-"false"}"
+[[ "$_WATCHING" = "watch" ]] && _WATCHING="true"
+
 
 # Functions
 error_msg(){
-    local msg=$1
-    echo -e "[ERROR] $msg"
-    exit 1
+  local msg="$1"
+  echo -e "[ERROR] $msg"
+  exit 1
+}
+
+
+log_msg(){
+  local msg="$1"
+  echo -e "[LOG] $msg"
 }
 
 
 validation(){
-  # [[ -d "$_SRC_DIR_ABSOLUTE_PATH" ]] && error_msg "Directory does not exist - $_SRC_DIR_ABSOLUTE_PATH"
   if [[ -d "$_SRC_DIR_ABSOLUTE_PATH" ]]; then
   :
   else
     error_msg "Directory does not exist - $_SRC_DIR_ABSOLUTE_PATH"
+  fi
+
+  if [[ -f "${_SRC_DIR_ABSOLUTE_PATH}/${_CODE_FILE_NAME}" ]]; then
+    :
+  else
+    error_msg "Missing $_CODE_FILE_NAME in: $_SRC_DIR_ABSOLUTE_PATH/${_CODE_FILE_NAME}"
   fi
 }
 
@@ -77,9 +95,28 @@ render_tfcoding(){
 
 
 # Main
-validation
-copy_files
-terraform_init
-inject_outputs
-debug_mode
-render_tfcoding
+main(){
+  validation
+  copy_files
+  terraform_init
+  inject_outputs
+  debug_mode
+  render_tfcoding
+}
+
+if [[ "$_WATCHING" = "true" ]] ; then
+  # Execute on file change in source dir
+  log_msg "Rendered:"
+  main
+  [[ "$_LOGGING" = "true" ]] && log_msg "Watching for changes in: $_SRC_DIR_ABSOLUTE_PATH"
+  inotifywait -qrmc --event close_write "$_SRC_DIR_ABSOLUTE_PATH" |
+    while read dir action file; do
+        [[ "$_LOGGING" = "true" ]] && log_msg "Modified $file, rendered:"
+        main
+    done
+else
+  # Run-once
+  main
+fi
+
+
