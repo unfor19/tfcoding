@@ -2,6 +2,9 @@
 set -e
 set -o pipefail
 
+_DOCKERHUB_TAG="${DOCKERHUB_TAG:-"unfor19/tfcoding:latest"}"
+
+
 error_msg(){
     local msg=$1
     echo -e "[ERROR] $msg"
@@ -33,8 +36,9 @@ should(){
 tfcoding(){
     local relative_path="$1"
     docker run --rm -t -v "${PWD}"/:/src/:ro \
-        unfor19/tfcoding "$relative_path"
+        "${_DOCKERHUB_TAG}" "$relative_path"
 }
+
 
 # Tests
 should pass "Basic Example" "tfcoding examples/basic"
