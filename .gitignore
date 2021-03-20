@@ -1,0 +1,7 @@
+.*
+!.github/
+!.*ignore*
+*tfstate*
+*tfvars*
+!.tfcoding.tf
+.terraform
