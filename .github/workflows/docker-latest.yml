@@ -77,6 +77,9 @@ jobs:
             --cache-from "${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_APP}" \
             -f "${{ matrix.DOCKERFILE_PATH }}" \
             --target "${TARGET_APP}"
+      - name: test docker image
+        run: |
+          ./scripts/tests.sh
       - name: docker push to dockerhub
         run: |
           echo '${{ secrets.DOCKER_PASSWORD }}' | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
