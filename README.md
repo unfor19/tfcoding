@@ -47,7 +47,6 @@ $ cd tfcoding
 $ docker run --rm -it -v "${PWD}"/:/src/:ro \
   unfor19/tfcoding --src_dir_relative_path examples/basic --watching
 
-# Output - auto-updates on changes in /src/examples/basic/tfcoding.tf
 [LOG] Sun Mar 21 22:28:24 UTC 2021 :: Terraform v0.13.5
 [LOG] Sun Mar 21 22:28:24 UTC 2021 :: Rendered for the first time
 {
@@ -58,7 +57,9 @@ $ docker run --rm -it -v "${PWD}"/:/src/:ro \
   ]
 }
 [LOG] Sun Mar 21 22:28:24 UTC 2021 :: Watching for changes in /src/examples/basic/tfcoding.tf
-# Changed the local value cidr_ab.stg from 10.11 to 10.17
+
+# Meanwhile ... Changed the map variable cidr_ab.stg from 10.11 to 10.17
+
 [LOG] Sun Mar 21 22:29:46 UTC 2021 :: Rendered
 {
   "cidr_ab": "10.17",
