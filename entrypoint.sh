@@ -100,8 +100,12 @@ render_tfcoding(){
   if [[ -n $_SINGLE_VALUE_OUTPUT ]]; then
     # single output
     local output_msg
-    output_msg="$(terraform output -json "${_SINGLE_VALUE_OUTPUT}")"
-    echo "{\"${_SINGLE_VALUE_OUTPUT}\":${output_msg}}" | jq
+    output_msg="$(terraform output -json "${_SINGLE_VALUE_OUTPUT}" 2>&1 || true)"
+    if [[ "$output_msg" =~ .*output.*not.*found ]]; then
+      error_msg "Local Value not defined: ${_SINGLE_VALUE_OUTPUT}"
+    else
+      echo "{\"${_SINGLE_VALUE_OUTPUT}\":${output_msg}}" | jq
+    fi
   else
     # all outputs (local values)
     terraform output -json | jq 'map_values(.value)'

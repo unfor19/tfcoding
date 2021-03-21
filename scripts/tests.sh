@@ -41,7 +41,11 @@ tfcoding(){
 
 
 # Tests
-should pass "Basic Example" "tfcoding -r examples/basic"
-should pass "Complex Example" "tfcoding -r examples/complex"
+should pass "Help Menu" "tfcoding --help"
+should pass "Basic Example - All local values" "tfcoding -r examples/basic"
+should pass "Basic Example - Single local value" "tfcoding -r examples/basic -o private_subnets"
+should pass "Complex Example - All local values" "tfcoding -r examples/complex"
+should pass "Complex Example - Single local values" "tfcoding -r examples/complex -o my_keys"
+should fail "Unknown single value" "tfcoding -r examples/complex -o unknown_local_value"
 should fail "No arguments provided" "tfcoding"
 should fail "Non existing dir" "tfcoding -r examples/non-existing-dir"
