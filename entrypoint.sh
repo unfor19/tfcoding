@@ -12,6 +12,7 @@ _SINGLE_VALUE_OUTPUT="${SINGLE_VALUE_OUTPUT:-""}"
 
 _SRC_DIR_ROOT="${SRC_DIR_ROOT:-"/src"}"
 _SRC_DIR_RELATIVE_PATH="$SRC_DIR_RELATIVE_PATH"
+[[ -z "$_SRC_DIR_RELATIVE_PATH" ]] && error_msg "Relative path is required, create a directory that contains tfcoding.tf"
 _SRC_DIR_ABSOLUTE_PATH="${_SRC_DIR_ROOT}/${_SRC_DIR_RELATIVE_PATH}"
 _CODE_FILE_NAME="tfcoding.tf"
 _CODE_DIR_ROOT="/code"
