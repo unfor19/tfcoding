@@ -38,18 +38,16 @@ ARG APP_USER_ID="1000"
 ARG APP_GROUP_NAME="appgroup"
 ARG APP_GROUP_ID="1000"
 
-RUN apk add --no-cache bash jq libstdc++
+RUN apk add --no-cache bash jq libstdc++ util-linux
 COPY --from=download /downloads/terraform /usr/local/bin/terraform
 COPY --from=download /downloads/hcl2json /usr/local/bin/hcl2json
 COPY --from=build-fswatch /usr/local/lib/*.so /usr/local/lib/*.so.* /usr/local/lib/
 COPY --from=build-fswatch /usr/local/bin/fswatch /usr/local/bin/fswatch
-
 WORKDIR /code/
 RUN \
     addgroup -g "${APP_GROUP_ID}" "${APP_GROUP_NAME}" && \
     adduser -H -D -u "$APP_USER_ID" -G "$APP_GROUP_NAME" "$APP_USER_NAME" && \
     chown -R "$APP_USER_ID":"$APP_GROUP_ID" .
 USER "$APP_USER_NAME"
-
-COPY entrypoint.sh .
-ENTRYPOINT ["bash", "/code/entrypoint.sh"]
+COPY . /usr/local/bin/
+ENTRYPOINT ["bash", "/usr/local/bin/entrypoint.sh"]
