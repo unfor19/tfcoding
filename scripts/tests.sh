@@ -35,14 +35,13 @@ should(){
 
 
 tfcoding(){
-    local relative_path="$1"
     docker run --rm -t -v "${PWD}"/:/src/:ro \
-        "${_DOCKERHUB_TAG}" "$relative_path"
+        "${_DOCKERHUB_TAG}" "$@"
 }
 
 
 # Tests
-should pass "Basic Example" "tfcoding examples/basic"
-should pass "Complex Example" "tfcoding examples/complex"
-should pass "No arguments provided - Uses the last tfcoding.tf that was found" "tfcoding"
-should fail "Non existing dir" "tfcoding examples/non-existing-dir"
+should pass "Basic Example" "tfcoding -r examples/basic"
+should pass "Complex Example" "tfcoding -r examples/complex"
+should fail "No arguments provided" "tfcoding"
+should fail "Non existing dir" "tfcoding -r examples/non-existing-dir"
