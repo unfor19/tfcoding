@@ -53,7 +53,7 @@ validation(){
 copy_files(){
   # Copy relevant files from /src/ to /code/ dir
   rm -rf /code/*
-  find "$_SRC_DIR_ABSOLUTE_PATH" -type f \( -name ''"$_CODE_FILE_NAME"'' -o -name '.tpl' -o -name '.json' \) \
+  find "$_SRC_DIR_ABSOLUTE_PATH" -type f \( -name ''"$_CODE_FILE_NAME"'' -o -name '*.tpl' -o -name '*.json' \) \
     -and \( -not -path '.git/' -not -path '.terraform/' -and -not -path ''"$_CODE_DIR_ROOT"'*' \) -exec cp {} ${_CODE_DIR_ROOT} \;
   
   if [[ ! -f "$_CODE_FILE_NAME" ]]; then
