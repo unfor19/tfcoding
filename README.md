@@ -44,16 +44,27 @@ Mount the source code directory to `/src/` (read-only) and provide a relative pa
 ```bash
 $ git clone https://github.com/unfor19/tfcoding.git
 $ cd tfcoding
-$ RELATIVE_PATH="examples/basic"
 $ docker run --rm -it -v "${PWD}"/:/src/:ro \
-  unfor19/tfcoding "$RELATIVE_PATH" watch
+  unfor19/tfcoding --src_dir_relative_path examples/basic --watching
 
-# Output - auto-updates on changes in /src/$RELATIVE_PATH
+# Output - auto-updates on changes in /src/examples/basic/tfcoding.tf
+[LOG] Sun Mar 21 22:28:24 UTC 2021 :: Terraform v0.13.5
+[LOG] Sun Mar 21 22:28:24 UTC 2021 :: Rendered for the first time
 {
-  "cidr_ab": 10.11,
+  "cidr_ab": "10.11",
   "private_subnets": [
     "10.11.0.0/24",
     "10.11.1.0/24"
+  ]
+}
+[LOG] Sun Mar 21 22:28:24 UTC 2021 :: Watching for changes in /src/examples/basic/tfcoding.tf
+# Changed the local value cidr_ab.stg from 10.11 to 10.17
+[LOG] Sun Mar 21 22:29:46 UTC 2021 :: Rendered
+{
+  "cidr_ab": "10.17",
+  "private_subnets": [
+    "10.17.0.0/24",
+    "10.17.1.0/24"
   ]
 }
 
