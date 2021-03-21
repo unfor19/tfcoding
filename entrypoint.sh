@@ -1,7 +1,10 @@
 #!/bin/bash
+
+# bargs
+source /usr/local/bin/bargs.sh "$@"
+
 set -e
 set -o pipefail
-
 
 # trap ctrl-c and call ctrl_c()
 trap ctrl_c INT
@@ -11,20 +14,16 @@ ctrl_c() {
 }
 
 # Global variables
-_CODE_FILE_NAME="tfcoding.tf"
-_SRC_DIR_ROOT="/src"
-_SRC_DIR_RELATIVE_PATH="${1:-"$RELATIVE_PATH"}"
-_SRC_DIR_RELATIVE_PATH="${_SRC_DIR_RELATIVE_PATH:-"$_ROOT_DIR"}"
+_SRC_DIR_ROOT="${SRC_DIR_ROOT:-"/src"}"
+_SRC_DIR_RELATIVE_PATH="$SRC_DIR_RELATIVE_PATH"
 _SRC_DIR_ABSOLUTE_PATH="${_SRC_DIR_ROOT}/${_SRC_DIR_RELATIVE_PATH}"
+_CODE_FILE_NAME="tfcoding.tf"
 _CODE_DIR_ROOT="/code"
+_SRC_FILE_ABSOLUTE_PATH="${_SRC_DIR_ABSOLUTE_PATH}/${_CODE_FILE_NAME}"
 
 _LOGGING="${LOGGING:-"true"}"
 _DEBUG="${DEBUG:-"false"}"
-
-# Valid values: true or watch
-_WATCHING="${2:-"$WATCHING"}"
-_WATCHING="${_WATCHING:-"false"}"
-[[ "$_WATCHING" = "watch" ]] && _WATCHING="true"
+_WATCHING="${WATCHING:-"false"}"
 
 
 # Functions
@@ -111,10 +110,10 @@ main(){
 
 [[ "$_LOGGING" = "true" ]] && log_msg "$(terraform version)"
 if [[ "$_WATCHING" = "true" ]] ; then
-  # Execute on file change in source dir
+  # Execute on file change in code file - tfcoding.tf
   log_msg "Rendered for the first time"
   main
-  [[ "$_LOGGING" = "true" ]] && log_msg "Watching for changes in $_SRC_DIR_ABSOLUTE_PATH"
+  [[ "$_LOGGING" = "true" ]] && log_msg "Watching for changes in ${_SRC_FILE_ABSOLUTE_PATH}"
   fswatch -0 -m poll_monitor --batch-marker --event-flags "${_SRC_DIR_ABSOLUTE_PATH}/${_CODE_FILE_NAME}" | while read -r -d "" event; do
     if [[ "$event" = "NoOp" ]]; then
       [[ "$_LOGGING" = "true" ]] && log_msg "Rendered"

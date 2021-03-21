@@ -1,0 +1,32 @@
+---
+name=src_dir_relative_path
+short=r
+description=Relative path to the dir that contains the code to render
+---
+name=src_dir_root
+short=s
+description=Source root dir in container
+default=/src
+---
+name=logging
+short=l
+description=Show logging messages
+default=true
+---
+name=debug
+short=d
+description=Print verbose output
+default=false
+---
+name=watching
+short=w
+description=Auto-render code_file_name on change
+flag=true
+default=false
+---
+name=bargs
+short=bargs
+description=bash entrypoint.sh -rel="basic/exmaples" --watching=true --logging=true --debug=false
+default=irrelevant
+---
+---
