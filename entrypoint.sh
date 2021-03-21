@@ -109,6 +109,7 @@ main(){
   render_tfcoding
 }
 
+[[ "$_LOGGING" = "true" ]] && log_msg "$(terraform version)"
 if [[ "$_WATCHING" = "true" ]] ; then
   # Execute on file change in source dir
   log_msg "Rendered for the first time"
