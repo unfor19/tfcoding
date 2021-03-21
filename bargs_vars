@@ -3,6 +3,11 @@ name=src_dir_relative_path
 short=r
 description=Relative path to the dir that contains tfcoding.tf
 ---
+name=single_value_output
+short=o
+description=Render a single local variable
+default=all
+---
 name=src_dir_root
 short=s
 description=Source root dir in container
@@ -26,7 +31,7 @@ default=false
 ---
 name=bargs
 short=bargs
-description=bash entrypoint.sh -r basic/exmaples --watching --logging true --debug false
+description=bash entrypoint.sh -r basic/exmaples --watching -o private_subnets
 default=irrelevant
 ---
 ---
