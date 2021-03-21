@@ -6,14 +6,10 @@ source /usr/local/bin/bargs.sh "$@"
 set -e
 set -o pipefail
 
-# trap ctrl-c and call ctrl_c()
-trap ctrl_c INT
-ctrl_c() {
-    echo "Stopped"
-    exit 0
-}
-
 # Global variables
+[[ "$SINGLE_VALUE_OUTPUT" = "all" ]] && SINGLE_VALUE_OUTPUT=""
+_SINGLE_VALUE_OUTPUT="${SINGLE_VALUE_OUTPUT:-""}"
+
 _SRC_DIR_ROOT="${SRC_DIR_ROOT:-"/src"}"
 _SRC_DIR_RELATIVE_PATH="$SRC_DIR_RELATIVE_PATH"
 _SRC_DIR_ABSOLUTE_PATH="${_SRC_DIR_ROOT}/${_SRC_DIR_RELATIVE_PATH}"
@@ -24,7 +20,6 @@ _SRC_FILE_ABSOLUTE_PATH="${_SRC_DIR_ABSOLUTE_PATH}/${_CODE_FILE_NAME}"
 _LOGGING="${LOGGING:-"true"}"
 _DEBUG="${DEBUG:-"false"}"
 _WATCHING="${WATCHING:-"false"}"
-
 
 # Functions
 error_msg(){
@@ -37,6 +32,14 @@ error_msg(){
 log_msg(){
   local msg="$1"
   echo -e "[LOG] $(date) :: $msg"
+}
+
+
+# trap ctrl-c and call ctrl_c()
+trap ctrl_c INT
+ctrl_c() {
+    log_msg "Stopped"
+    exit 0
 }
 
 
@@ -94,7 +97,16 @@ debug_mode(){
 render_tfcoding(){
   # terraform apply renders the outputs
   terraform apply -auto-approve 1>/dev/null
-  terraform output -json | jq 'map_values(.value)'
+  if [[ -n $_SINGLE_VALUE_OUTPUT ]]; then
+    # single output
+    local output_msg
+    output_msg="$(terraform output -json "${_SINGLE_VALUE_OUTPUT}")"
+    echo "{\"${_SINGLE_VALUE_OUTPUT}\":${output_msg}}" | jq
+  else
+    # all outputs (local values)
+    terraform output -json | jq 'map_values(.value)'
+  fi
+  
 }
 
 
