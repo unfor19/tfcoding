@@ -8,6 +8,7 @@ _DOCKERHUB_TAG="${DOCKERHUB_TAG:-"unfor19/tfcoding:latest"}"
 error_msg(){
     local msg=$1
     echo -e "[ERROR] $msg"
+    export DEBUG=1
     exit 1
 }
 
@@ -23,12 +24,12 @@ should(){
 
     echo -e "[LOG] Output:\n\n$output_msg\n"
 
-    if [[ $expected == "pass" && $output_code -eq 0 ]]; then
+    if [[ $expected == "pass" && $output_code -eq 0 && ! $output_msg =~ .*(ERROR|Error|error).* ]]; then
         echo "[LOG] Test passed as expected"
-    elif [[ $expected == "fail" && $output_code -eq 1 ]] || [[ $expected == "fail" && $output_msg =~ [ERROR].* ]]; then
+    elif [[ $expected == "fail" && $output_code -eq 1 ]] || [[ $expected == "fail" && $output_msg =~ .*(ERROR|Error|error).* ]]; then
         echo "[LOG] Test failed as expected"
     else
-        error_msg "Test output is not expected, terminating - $output_msg"
+        error_msg "Test output is not expected, terminating"
     fi
 }
 
