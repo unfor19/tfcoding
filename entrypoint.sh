@@ -73,9 +73,13 @@ inject_outputs(){
   declare -a arr=($(hcl2json "$_CODE_FILE_NAME" | jq -r '.locals[] | keys[]'))
   for local_value in "${arr[@]}"; do
       cat <<EOF >> "$_CODE_FILE_NAME"
+
+
 output "${local_value}" {
     value = local.${local_value}
 }
+
+
 EOF
   done
 }
