@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  tfcoding:
+    container_name: tfcoding
+    image: unfor19/tfcoding:latest
+    volumes:
+      - ./:/src/:ro
+    command:
+      - "--src_dir_relative_path"
+      - "${SRC_DIR_RELATIVE_PATH:-examples/basic}"
+      - "--watching"
+    restart: always
+    tty: true # colorful output
