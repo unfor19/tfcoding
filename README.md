@@ -73,6 +73,46 @@ $ docker run --rm -it -v "${PWD}"/:/src/:ro \
 # To see a more complicated example change basic to complex
 ```
 
+### Docker Compose
+
+Requires [docker-compose](https://docs.docker.com/compose/install/)
+
+```bash
+$ git clone https://github.com/unfor19/tfcoding.git
+$ cd tfcoding
+$ docker-compose up
+```
+
+<details>
+
+<summary>docker-compose output - Expand/Collapse</summary>
+
+```bash
+Starting tfcoding ... done
+Attaching to tfcoding
+tfcoding    | [LOG] Mon Mar 22 00:00:35 UTC 2021 :: Terraform v0.13.5
+tfcoding    | [LOG] Mon Mar 22 00:00:35 UTC 2021 :: Rendered for the first time
+tfcoding    | {
+tfcoding    |   "cidr_ab": "10.11",
+tfcoding    |   "private_subnets": [
+tfcoding    |     "10.11.0.0/24",
+tfcoding    |     "10.11.1.0/24"
+tfcoding    |   ]
+tfcoding    | }
+tfcoding    | [LOG] Mon Mar 22 00:00:36 UTC 2021 :: Watching for changes in /src/examples/basic/tfcoding.tf
+# Meanwhile ... Changed the map variable cidr_ab.stg from 10.11 to 10.17
+tfcoding    | [LOG] Mon Mar 22 00:00:58 UTC 2021 :: Rendered
+tfcoding    | {
+tfcoding    |   "cidr_ab": "10.17",
+tfcoding    |   "private_subnets": [
+tfcoding    |     "10.17.0.0/24",
+tfcoding    |     "10.17.1.0/24"
+tfcoding    |   ]
+tfcoding    | }
+```
+
+</details>
+
 ## Authors
 
 Created and maintained by [Meir Gabay](https://github.com/unfor19)
