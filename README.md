@@ -15,12 +15,26 @@ This is especially useful for learning about Expressions and Functions that you 
 ## Requirements
 
 - [Docker](https://docs.docker.com/get-docker/)
+- (Optional) [Docker Compose](https://docs.docker.com/compose/install/)
 
 ## Usage
 
+The Docker container is a self-contained CLI; to view the help menu, execute the following command:
+
+```bash
+$ docker run --rm -it -v "${PWD}"/:/src/:ro \
+  unfor19/tfcoding --help
+```
+
+<!-- replacer_start_helpmenu -->
+
+Help menu should be rendered here
+
+<!-- replacer_end_helpmenu -->
+
 ### Create the file tfcoding.tf
 
-This file contains the code that will be rendered. Currently supports Variables and Local Values, does not work when referencing to Resources and Modules.
+This file contains the code that will be rendered. Currently supports Variables and Local Values, does not work when referencing to Resources and Modules. The file must stored in a relative directory to `$PWD`.
 
 ```go
 variable "environment" {
@@ -45,9 +59,11 @@ locals {
 }
 ```
 
-### Render the local values
+### Render Local Values
 
-Mount the source code directory to `/src/` (read-only) and provide a relative path from `$PWD` to a directory that contains `tfcoding.tf`.
+#### Docker
+
+Mount the source code directory to `/src/` (read-only) and provide a relative path from `$PWD` to a directory that contains `tfcoding.tf`. The files that will be included in the rendering process are `tfcoding.tf` `*.tpl` and `*.json`.
 
 ```bash
 $ git clone https://github.com/unfor19/tfcoding.git
@@ -79,9 +95,7 @@ $ docker run --rm -it -v "${PWD}"/:/src/:ro \
 # To see a more complicated example change basic to complex
 ```
 
-### Docker Compose
-
-Requires [docker-compose](https://docs.docker.com/compose/install/)
+#### Docker Compose
 
 ```bash
 $ git clone https://github.com/unfor19/tfcoding.git
