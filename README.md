@@ -28,7 +28,16 @@ $ docker run --rm -it -v "${PWD}"/:/src/:ro \
 
 <!-- replacer_start_helpmenu -->
 
-Help menu should be rendered here
+```bash
+Usage: bash entrypoint.sh -r basic/exmaples --watching -o private_subnets
+
+	--src_dir_relative_path  |  -r  [REQUIRED]  Relative path to the dir that contains tfcoding.tf
+	--single_value_output    |  -o  [all]       Render a single local variable
+	--src_dir_root           |  -s  [/src]      Source root dir in container
+	--logging                |  -l  [true]      Show logging messages
+	--debug                  |  -d  [false]     Print verbose output
+	--watching               |  -w  [FLAG]      Auto-render tfcoding.tf on change
+```
 
 <!-- replacer_end_helpmenu -->
 
