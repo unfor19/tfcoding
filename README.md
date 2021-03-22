@@ -2,7 +2,13 @@
 
 [![Push latest version to DockerHub](https://github.com/unfor19/tfcoding/actions/workflows/docker-latest.yml/badge.svg)](https://github.com/unfor19/tfcoding/actions/workflows/docker-latest.yml) [![Dockerhub pulls](https://img.shields.io/docker/pulls/unfor19/tfcoding)](https://hub.docker.com/r/unfor19/tfcoding)
 
-Speed up development cycle when using terraform's [Expressions](https://www.terraform.io/docs/language/expressions/index.html) and [Functions](https://www.terraform.io/docs/language/functions/index.html) by rendering [Local Values](https://www.terraform.io/docs/language/values/locals.html). This app attempts to imitate the behavior of the [helm template](https://helm.sh/docs/helm/helm_template/) command on terraform's local values.
+<img alt="tfcoding-logo" src="https://user-images.githubusercontent.com/15122452/111926094-22f28e80-8ab4-11eb-9a72-ca2394d6bb33.png" height="300"/>
+
+Render Terraform's [Expressions](https://www.terraform.io/docs/language/expressions/index.html) and [Functions](https://www.terraform.io/docs/language/functions/index.html) locally without any hassle.
+
+This application runs in the background and watches for changes in the file `tfcoding.tf`, once this file is modified its [Local Values](https://www.terraform.io/docs/language/values/locals.html) are automatically rendered to the terminal's output (stdout).
+
+This is especially useful for learning about Expressions and Functions that you are not familiar with, while avoiding the whole shebang of terraform init, plan and apply. The goal here is to "compile Terraform" locally to speed up the development (and learning) process.
 
 ## Requirements
 
