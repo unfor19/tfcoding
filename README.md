@@ -57,9 +57,7 @@ $ docker run --rm -it -v "${PWD}"/:/src/:ro \
   ]
 }
 [LOG] Sun Mar 21 22:28:24 UTC 2021 :: Watching for changes in /src/examples/basic/tfcoding.tf
-
 # Meanwhile ... Changed the map variable cidr_ab.stg from 10.11 to 10.17
-
 [LOG] Sun Mar 21 22:29:46 UTC 2021 :: Rendered
 {
   "cidr_ab": "10.17",
