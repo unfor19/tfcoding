@@ -167,6 +167,9 @@ $ docker-compose -p tfcoding -f docker-compose-aws.yml up
 $ docker-compose -p tfcoding down -v --remove-orphans
 $ docker volume rm tfcoding_code_dir_tmp_aws tfcoding_plugins_cache_dir
 $ rm -r .localstack
+
+# If you're getting weird errors, simply remove the container
+$ docker rm tfcoding-aws
 ```
 
 #### terraform destroy
