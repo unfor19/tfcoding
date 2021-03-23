@@ -21,7 +21,7 @@ services:
       - DOCKER_HOST=unix:///var/run/docker.sock
       - HOST_TMP_FOLDER=${TMPDIR}
     volumes:
-      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - "${TMPDIR:-.localstack/}:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
       - shared
