@@ -120,17 +120,19 @@ render_tfcoding(){
   # terraform apply renders the outputs
   cd "$_TMP_DIR_TF_FILES"
   terraform fmt 1>/dev/null
+
   if ! terraform validate 1>/dev/null ; then
-    log_msg "Fix the above syntax error\n${output_msg}"
+    log_msg "Fix the above syntax error"
     return
   fi
-  terraform apply -auto-approve 1>/dev/null
-  if [[ -n $_SINGLE_VALUE_OUTPUT ]]; then
-    # single output
-    local output_msg
-    output_msg="$(terraform output -json "${_SINGLE_VALUE_OUTPUT}" 2>&1 || true)"
-    if [[ "$output_msg" =~ .*output.*not.*found ]]; then
-      error_msg "Local Value not defined: ${_SINGLE_VALUE_OUTPUT}"
+
+  if [[ "$_MOCK_AWS" = "true" ]]; then
+    # Mock AWS
+    if terraform plan -input=false -out=plan.tfout -compact-warnings ; then
+      if ! terraform apply -lock=false -auto-approve -compact-warnings plan.tfout ; then
+        log_msg "terraform apply - Fix the above error"
+        return
+      fi
     else
       log_msg "terraform plan - Fix the above error"
       return
@@ -157,6 +159,7 @@ render_tfcoding(){
     fi
   fi
 }
+
 
 
 # Main
