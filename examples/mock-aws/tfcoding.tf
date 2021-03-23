@@ -15,14 +15,11 @@ module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
   name = "my-vpc"
-  cidr = "${local.cidr_ab}.0.0/17"
+  cidr = "${local.cidr_ab}.0.0/16"
 
   azs             = ["${var.region}a", "${var.region}b"]
   private_subnets = local.private_subnets
   public_subnets  = local.public_subnets
-
-  enable_nat_gateway = false
-  enable_vpn_gateway = false
 
   tags = {
     Terraform   = "true"

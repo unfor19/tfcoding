@@ -6,16 +6,19 @@ source /usr/local/bin/bargs.sh "$@"
 set -e
 set -o pipefail
 
+
 # Global variables
 [[ "$SINGLE_VALUE_OUTPUT" = "all" ]] && SINGLE_VALUE_OUTPUT=""
 _SINGLE_VALUE_OUTPUT="${SINGLE_VALUE_OUTPUT:-""}"
 
+# Dirs and paths
 _SRC_DIR_ROOT="${SRC_DIR_ROOT:-"/src"}"
 _SRC_DIR_RELATIVE_PATH="$SRC_DIR_RELATIVE_PATH"
 [[ -z "$_SRC_DIR_RELATIVE_PATH" ]] && error_msg "Relative path is required, create a directory that contains tfcoding.tf"
 _SRC_DIR_ABSOLUTE_PATH="${_SRC_DIR_ROOT}/${_SRC_DIR_RELATIVE_PATH}"
 _CODE_FILE_NAME="tfcoding.tf"
 _CODE_DIR_TMP="/tmp"
+_TMP_DIR_TF_FILES="${_CODE_DIR_TMP}/code"
 _SRC_FILE_ABSOLUTE_PATH="${_SRC_DIR_ABSOLUTE_PATH}/${_CODE_FILE_NAME}"
 
 
@@ -35,8 +38,6 @@ _DEBUG="${DEBUG:-"false"}"
 _WATCHING="${WATCHING:-"false"}"
 _MOCK_AWS="${MOCK_AWS:-"false"}"
 
-
-_TMP_DIR_TF_FILES="${_CODE_DIR_TMP}/code"
 
 # Functions
 error_msg(){
@@ -173,7 +174,6 @@ render_tfcoding(){
 }
 
 
-
 # Main
 main(){
   validation
@@ -184,6 +184,7 @@ main(){
   render_tfcoding
   [[ "$_LOGGING" = "true" && "$_WATCHING" = "true" ]] && log_msg "Watching for changes in ${_SRC_FILE_ABSOLUTE_PATH}"
 }
+
 
 [[ "$_LOGGING" = "true" ]] && log_msg "$(terraform version)"
 if [[ "$_WATCHING" = "true" ]]; then
