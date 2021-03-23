@@ -165,6 +165,8 @@ $ docker-compose -p tfcoding -f docker-compose-aws.yml up
 
 # Cleanup
 $ docker-compose -p tfcoding down -v --remove-orphans
+$ docker volume rm tfcoding_code_dir_tmp_aws tfcoding_plugins_cache_dir
+$ rm -r .localstack
 ```
 
 #### terraform destroy

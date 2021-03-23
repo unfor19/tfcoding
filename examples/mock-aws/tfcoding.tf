@@ -17,12 +17,11 @@ module "vpc" {
   name = "my-vpc"
   cidr = "${local.cidr_ab}.0.0/17"
 
-  azs             = ["${var.region}a", "${var.region}b"]
-  private_subnets = local.private_subnets
-  public_subnets  = local.public_subnets
-
-  enable_nat_gateway = false
-  enable_vpn_gateway = false
+  azs                = ["${var.region}a", "${var.region}b"]
+  private_subnets    = local.private_subnets
+  public_subnets     = local.public_subnets
+  single_nat_gateway = true
+  enable_nat_gateway = true
 
   tags = {
     Terraform   = "true"
