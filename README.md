@@ -44,7 +44,7 @@ Usage: bash entrypoint.sh -r basic/exmaples --watching -o private_subnets
 
 ### Create the file tfcoding.tf
 
-This file contains the code that will be rendered. Currently supports Variables and Local Values, does not work when referencing to Resources and Modules. The file must stored in a relative directory to `$PWD`.
+This file contains the code that will be rendered. Currently supports Variables and Local Values, does not work when referencing to Resources and Modules. The file must be stored in a relative directory to `$PWD`.
 
 ```go
 variable "environment" {
@@ -162,6 +162,17 @@ $ docker-compose -p tfcoding -f docker-compose-localstack.yml up --detached
 $ docker-compose -p tfcoding -f docker-compose-aws.yml up
 ...
 # Change something in examples/mock-aws/tfcoding.tf
+```
+
+#### terraform destroy
+
+To execute `terraform destroy` on changing `tfcoding.tf`, add the Local Value `terraform_destroy = true`. For example:
+
+```go
+// After "destroying" the infra, remove this variable to execute `terraform apply`
+locals {
+  terraform_destroy = true
+}
 ```
 
 ## Authors

@@ -93,9 +93,15 @@ terraform_init(){
 
 inject_outputs(){
   # Inject outputs to $_CODE_FILE_NAME according to locals{}
-  declare -a arr=($(hcl2json "${_TMP_DIR_TF_FILES}/${_CODE_FILE_NAME}" | jq -r '.locals[] | keys[]'))
-  for local_value in "${arr[@]}"; do
-      cat <<EOF >> "${_TMP_DIR_TF_FILES}/${_CODE_FILE_NAME}"
+  local tf_json
+  tf_json=$(hcl2json "${_TMP_DIR_TF_FILES}/${_CODE_FILE_NAME}" | jq -r '.locals[]')
+  declare -a arr_json=($(echo "$tf_json" | jq -r 'keys[]'))
+  for local_value in "${arr_json[@]}"; do
+    if [[ "$local_value" = "terraform_destroy" ]] ; then
+      export _TERRAFORM_DESTROY="true"
+      continue
+    fi
+    cat <<EOF >> "${_TMP_DIR_TF_FILES}/${_CODE_FILE_NAME}"
 
 
 output "${local_value}" {
@@ -123,6 +129,12 @@ render_tfcoding(){
 
   if ! terraform validate 1>/dev/null ; then
     log_msg "Fix the above syntax error"
+    return
+  fi
+
+  if [[ "$_TERRAFORM_DESTROY" = "true" ]]; then
+    terraform destroy -auto-approve
+    unset _TERRAFORM_DESTROY
     return
   fi
 
