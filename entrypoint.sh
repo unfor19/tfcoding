@@ -98,7 +98,10 @@ debug_mode(){
 render_tfcoding(){
   # terraform apply renders the outputs
   terraform fmt 1>/dev/null
-  terraform validate 1>/dev/null
+  if ! terraform validate 1>/dev/null ; then
+    log_msg "Fix the above syntax error\n${output_msg}"
+    return
+  fi
   terraform apply -auto-approve 1>/dev/null
   if [[ -n $_SINGLE_VALUE_OUTPUT ]]; then
     # single output
