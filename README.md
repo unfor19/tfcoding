@@ -31,12 +31,13 @@ $ docker run --rm -it -v "${PWD}"/:/src/:ro \
 ```bash
 Usage: bash entrypoint.sh -r basic/exmaples --watching -o private_subnets
 
-	--src_dir_relative_path  |  -r  [REQUIRED]  Relative path to the dir that contains tfcoding.tf
-	--single_value_output    |  -o  [all]       Render a single local variable
-	--src_dir_root           |  -s  [/src]      Source root dir in container
-	--logging                |  -l  [true]      Show logging messages
-	--debug                  |  -d  [false]     Print verbose output
-	--watching               |  -w  [FLAG]      Auto-render tfcoding.tf on change
+	--src_dir_relative_path  |  -r    [REQUIRED]  Relative path to the dir that contains tfcoding.tf
+	--single_value_output    |  -o    [all]       Render a single local variable
+	--src_dir_root           |  -s    [/src]      Source root dir in container
+	--logging                |  -l    [true]      Show logging messages
+	--debug                  |  -d    [false]     Print verbose output
+	--watching               |  -w    [FLAG]      Auto-render tfcoding.tf on change
+	--mock_aws               |  -aws  [FLAG]      Use this flag for communicating with Localstack
 ```
 
 <!-- replacer_end_helpmenu -->
