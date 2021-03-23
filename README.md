@@ -162,6 +162,9 @@ $ docker-compose -p tfcoding -f docker-compose-localstack.yml up --detached
 $ docker-compose -p tfcoding -f docker-compose-aws.yml up
 ...
 # Change something in examples/mock-aws/tfcoding.tf
+
+# Cleanup
+$ docker-compose -p tfcoding down -v --remove-orphans
 ```
 
 #### terraform destroy
