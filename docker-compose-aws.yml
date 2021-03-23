@@ -4,19 +4,21 @@ networks:
   shared:
 
 volumes:
-  code_dir_tmp:
+  code_dir_tmp_aws:
 
 services:
-  tfcoding:
-    container_name: tfcoding
+  tfcoding-aws:
+    container_name: tfcoding-aws
     image: unfor19/tfcoding:latest
     volumes:
       - ./:/src/:ro
-      - code_dir_tmp:/tmp/
+      - code_dir_tmp_aws:/tmp/
+
     command:
       - "--src_dir_relative_path"
-      - "${SRC_DIR_RELATIVE_PATH:-examples/basic}"
+      - "${SRC_DIR_RELATIVE_PATH:-examples/mock-aws}"
       - "--watching"
+      - "--mock_aws"
     restart: always
     tty: true # colorful output
     networks:

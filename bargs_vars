@@ -29,6 +29,12 @@ description=Auto-render tfcoding.tf on change
 flag=true
 default=false
 ---
+name=mock_aws
+short=aws
+description=Use this flag for communicating with Localstack
+flag=true
+default=false
+---
 name=bargs
 short=bargs
 description=bash entrypoint.sh -r basic/exmaples --watching -o private_subnets

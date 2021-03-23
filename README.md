@@ -142,6 +142,27 @@ tfcoding    | }
 
 </details>
 
+### Mock AWS
+
+This feature relies on the open-source project [localstack](https://github.com/localstack/localstack), which means you can provision the [AWS core resources](https://github.com/localstack/localstack#overview), see [examples/mock-aws/](./examples/mock-aws/)
+
+#### IMPORTANT
+
+You might encounter the below warning after executing `docker-compose up` - **DO NOT** add the `--remove-orphans` flag
+
+> *WARNING: Found orphan containers (tfcoding, localstack) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.*
+
+Let's go!
+
+```bash
+$ git clone https://github.com/unfor19/tfcoding.git
+$ cd tfcoding
+$ docker-compose -p tfcoding -f docker-compose-localstack.yml up --detached
+$ docker-compose -p tfcoding -f docker-compose-aws.yml up
+...
+# Change something in examples/mock-aws/tfcoding.tf
+```
+
 ## Authors
 
 Created and maintained by [Meir Gabay](https://github.com/unfor19)
