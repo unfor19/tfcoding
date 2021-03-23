@@ -1,14 +1,43 @@
 version: "3.7"
 
+networks:
+  net1:
+
 services:
   tfcoding:
+    depends_on:
+      - localstack
     container_name: tfcoding
     image: unfor19/tfcoding:latest
     volumes:
       - ./:/src/:ro
     command:
       - "--src_dir_relative_path"
-      - "${SRC_DIR_RELATIVE_PATH:-examples/basic}"
+      - "${SRC_DIR_RELATIVE_PATH:-examples/mock-aws}"
       - "--watching"
     restart: always
     tty: true # colorful output
+    networks:
+      - net1
+
+  localstack:
+    container_name: "${LOCALSTACK_DOCKER_NAME-localstack_main}"
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+      - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
+    environment:
+      - SERVICES=${SERVICES- }
+      - DEBUG=${DEBUG- }
+      - DATA_DIR=${DATA_DIR- }
+      - PORT_WEB_UI=${PORT_WEB_UI- }
+      - LAMBDA_EXECUTOR=${LAMBDA_EXECUTOR- }
+      - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - HOST_TMP_FOLDER=${TMPDIR}
+    volumes:
+      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - net1

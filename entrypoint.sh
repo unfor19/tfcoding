@@ -7,6 +7,9 @@ set -e
 set -o pipefail
 
 # Global variables
+export TF_PLUGIN_CACHE_DIR="/code/.terraform.d/plugin-cache"
+mkdir -p "$TF_PLUGIN_CACHE_DIR"
+
 [[ "$SINGLE_VALUE_OUTPUT" = "all" ]] && SINGLE_VALUE_OUTPUT=""
 _SINGLE_VALUE_OUTPUT="${SINGLE_VALUE_OUTPUT:-""}"
 
@@ -15,7 +18,7 @@ _SRC_DIR_RELATIVE_PATH="$SRC_DIR_RELATIVE_PATH"
 [[ -z "$_SRC_DIR_RELATIVE_PATH" ]] && error_msg "Relative path is required, create a directory that contains tfcoding.tf"
 _SRC_DIR_ABSOLUTE_PATH="${_SRC_DIR_ROOT}/${_SRC_DIR_RELATIVE_PATH}"
 _CODE_FILE_NAME="tfcoding.tf"
-_CODE_DIR_ROOT="/code"
+_CODE_DIR_SRC="/code/src"
 _SRC_FILE_ABSOLUTE_PATH="${_SRC_DIR_ABSOLUTE_PATH}/${_CODE_FILE_NAME}"
 
 _LOGGING="${LOGGING:-"true"}"
@@ -55,24 +58,27 @@ validation(){
 
 copy_files(){
   # Copy relevant files from /src/ to /code/ dir
-  rm -rf /code/*
-  find "$_SRC_DIR_ABSOLUTE_PATH" -type f \( -name ''"$_CODE_FILE_NAME"'' -o -name '*.tpl' -o -name '*.json' \) \
-    -and \( -not -path '.git/' -not -path '.terraform/' -and -not -path ''"$_CODE_DIR_ROOT"'*' \) -exec cp {} ${_CODE_DIR_ROOT} \;
+  rm -rf "$_CODE_DIR_SRC"
+  mkdir -p "$_CODE_DIR_SRC"
+  find "$_SRC_DIR_ABSOLUTE_PATH" -type f \( -name '*.tf' -o -name '*.tpl' -o -name '*.json' \) \
+    -and \( -not -path '.git/' -not -path '.terraform/' -and -not -path ''"$_CODE_DIR_SRC"'*' \) -exec cp {} "$_CODE_DIR_SRC" \;
   
-  if [[ ! -f "$_CODE_FILE_NAME" ]]; then
-    error_msg "File does not exist - $_CODE_FILE_NAME"
+  if [[ ! -f "$_CODE_DIR_SRC/$_CODE_FILE_NAME" ]]; then
+    error_msg "File does not exist - $_CODE_DIR_SRC/$_CODE_FILE_NAME"
   fi
 }
 
 
 terraform_init(){
   # Create a local empty tfstate file
-  terraform init 1>/dev/null
+  cd "$_CODE_DIR_SRC"
+  terraform init # 1>/dev/null
 }
 
 
 inject_outputs(){
   # Inject outputs to $_CODE_FILE_NAME according to locals{}
+  cd "$_CODE_DIR_SRC"
   declare -a arr=($(hcl2json "$_CODE_FILE_NAME" | jq -r '.locals[] | keys[]'))
   for local_value in "${arr[@]}"; do
       cat <<EOF >> "$_CODE_FILE_NAME"
@@ -89,6 +95,7 @@ EOF
 
 
 debug_mode(){
+  cd "$_CODE_DIR_SRC"
   if [[ $_DEBUG = "true" ]]; then
     cat "$_CODE_FILE_NAME"
   fi
@@ -97,9 +104,10 @@ debug_mode(){
 
 render_tfcoding(){
   # terraform apply renders the outputs
+  cd "$_CODE_DIR_SRC"
   terraform fmt 1>/dev/null
   terraform validate 1>/dev/null
-  terraform apply -auto-approve 1>/dev/null
+  terraform apply -auto-approve # 1>/dev/null
   if [[ -n $_SINGLE_VALUE_OUTPUT ]]; then
     # single output
     local output_msg
