@@ -38,12 +38,12 @@ ARG APP_USER_ID="1000"
 ARG APP_GROUP_NAME="appgroup"
 ARG APP_GROUP_ID="1000"
 
-RUN apk add --no-cache bash jq libstdc++ util-linux
+RUN apk add --no-cache bash jq libstdc++ util-linux git
 COPY --from=download /downloads/terraform /usr/local/bin/terraform
 COPY --from=download /downloads/hcl2json /usr/local/bin/hcl2json
 COPY --from=build-fswatch /usr/local/lib/*.so /usr/local/lib/*.so.* /usr/local/lib/
 COPY --from=build-fswatch /usr/local/bin/fswatch /usr/local/bin/fswatch
-WORKDIR /code/
+WORKDIR /src/
 RUN \
     addgroup -g "${APP_GROUP_ID}" "${APP_GROUP_NAME}" && \
     adduser -H -D -u "$APP_USER_ID" -G "$APP_GROUP_NAME" "$APP_USER_NAME" && \
