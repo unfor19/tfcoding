@@ -17,11 +17,9 @@ module "vpc" {
   name = "my-vpc"
   cidr = "${local.cidr_ab}.0.0/16"
 
-  azs                = ["${var.region}a", "${var.region}b"]
-  private_subnets    = local.private_subnets
-  public_subnets     = local.public_subnets
-  single_nat_gateway = true
-  enable_nat_gateway = true
+  azs             = ["${var.region}a", "${var.region}b"]
+  private_subnets = local.private_subnets
+  public_subnets  = local.public_subnets
 
   tags = {
     Terraform   = "true"
