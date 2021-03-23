@@ -32,6 +32,7 @@ module "vpc" {
 
 
 locals {
+  # terraform_destroy = true
   cidr_ab = lookup(var.cidr_ab, var.environment)
   private_subnets = [
     "${local.cidr_ab}.0.0/24",
@@ -45,4 +46,5 @@ locals {
   my_value           = module.vpc.vpc_id
   my_subnet          = module.vpc.public_subnets
   my_private_subnets = module.vpc.private_subnets
+  my_sg_id           = module.vpc.default_security_group_id
 }
