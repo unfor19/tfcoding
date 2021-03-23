@@ -69,15 +69,8 @@ jobs:
       - name: docker pull cached from ghcr
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
-          docker pull "${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_BASE}"
           docker pull "${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_APP}"
-      - name: docker build image
-        run: |
-          docker build . -t "${{ matrix.DOCKERHUB_TAG }}" \
-            --cache-from "${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_BASE}" \
-            --cache-from "${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_APP}" \
-            -f "${{ matrix.DOCKERFILE_PATH }}" \
-            --target "${TARGET_APP}"
+          docker tag "${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_APP}" "${{ matrix.DOCKERHUB_TAG }}"
       - name: test docker image
         run: |
           ./scripts/tests.sh
