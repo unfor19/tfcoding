@@ -54,9 +54,9 @@ jobs:
           docker push "${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_BASE}"
           docker push "${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_APP}"
 
-  dockerhub-push:
+  testing:
     needs: docker-build
-    name: push latest
+    name: testing
     runs-on: ubuntu-20.04
     strategy:
       matrix:
