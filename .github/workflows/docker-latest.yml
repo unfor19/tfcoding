@@ -80,11 +80,11 @@ jobs:
           - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.12.30"
             DOCKERFILE_PATH: Dockerfile
             TERRAFORM_VERSION: "0.12.30"
-            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.12.30"
+            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.12.30-latest"
           - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.13.6"
             DOCKERFILE_PATH: Dockerfile
             TERRAFORM_VERSION: "0.13.6"
-            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.13.6"
+            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.13.6-latest"
           - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.13.6"
             DOCKERFILE_PATH: Dockerfile
             TERRAFORM_VERSION: "0.13.6"
@@ -92,7 +92,7 @@ jobs:
           - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.14.8"
             DOCKERFILE_PATH: Dockerfile
             TERRAFORM_VERSION: "0.14.8"
-            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.14.8"
+            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.14.8-latest"
           - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.15.0-beta2"
             DOCKERFILE_PATH: Dockerfile
             TERRAFORM_VERSION: "0.15.0-beta2"
