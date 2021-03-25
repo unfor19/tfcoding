@@ -17,34 +17,31 @@ This is especially useful for learning about Expressions and Functions that you 
 - [Docker](https://docs.docker.com/get-docker/)
 - (Optional) [Docker Compose](https://docs.docker.com/compose/install/)
 
-## Usage
-
-The Docker container is a self-contained CLI; to view the help menu, execute the following command:
+## Quick Start
 
 ```bash
-$ docker run --rm -it -v "${PWD}"/:/src/:ro \
-  unfor19/tfcoding --help
+$ git clone https://github.com/unfor19/tfcoding.git
+$ cd tfcoding
+$ make run
+
+docker run --rm -it \
+-v /home/meir/tfcoding/:/src/:ro \
+unfor19/tfcoding:latest-tf0.13.5 -r examples/basic --watching 
+[LOG] Thu Mar 25 00:23:59 UTC 2021 :: Terraform v0.13.6
+[LOG] Thu Mar 25 00:23:59 UTC 2021 :: Rendered for the first time
+{
+  "cidr_ab": "10.11",
+  "private_subnets": [
+    "10.11.0.0/24",
+    "10.11.1.0/24"
+  ]
+}
+[LOG] Thu Mar 25 00:23:59 UTC 2021 :: Watching for changes in /src/examples/basic/tfcoding.tf
 ```
 
-<!-- replacer_start_helpmenu -->
+### Modify the file [examples/basic/tfcoding.tf](./examples/basic/tfcoding.tf)
 
-```bash
-Usage: bash entrypoint.sh -r basic/exmaples --watching -o private_subnets
-
-	--src_dir_relative_path  |  -r    [REQUIRED]  Relative path to the dir that contains tfcoding.tf
-	--single_value_output    |  -o    [all]       Render a single local variable
-	--src_dir_root           |  -s    [/src]      Source root dir in container
-	--logging                |  -l    [true]      Show logging messages
-	--debug                  |  -d    [false]     Print verbose output
-	--watching               |  -w    [FLAG]      Auto-render tfcoding.tf on change
-	--mock_aws               |  -aws  [FLAG]      Use this flag for communicating with Localstack
-```
-
-<!-- replacer_end_helpmenu -->
-
-### Create the file tfcoding.tf
-
-This file contains the code that will be rendered. Currently supports Variables and Local Values, does not work when referencing to Resources and Modules. The file must be stored in a relative directory to `$PWD`.
+This file contains the code that will be rendered and it must be stored in a relative directory to `$PWD`. Currently supports Variables and Local Values. To use Resources and Modules scroll down to Mock AWS.
 
 ```go
 variable "environment" {
@@ -69,18 +66,21 @@ locals {
 }
 ```
 
-### Render Local Values
-
-#### Docker
+## Docker Specific dir
 
 Mount the source code directory to `/src/` (read-only) and provide a relative path from `$PWD` to a directory that contains `tfcoding.tf`. The files that will be included in the rendering process are `tfcoding.tf` `*.tpl` and `*.json`.
 
 ```bash
 $ git clone https://github.com/unfor19/tfcoding.git
 $ cd tfcoding
-$ docker run --rm -it -v "${PWD}"/:/src/:ro \
-  unfor19/tfcoding --src_dir_relative_path examples/basic --watching
+$ make run SRC_DIR_RELATIVE_PATH=examples/basic
+```
 
+<details>
+
+<summary>Docker output - Expand/Collapse</summary>
+
+```bash
 [LOG] Sun Mar 21 22:28:24 UTC 2021 :: Terraform v0.13.5
 [LOG] Sun Mar 21 22:28:24 UTC 2021 :: Rendered for the first time
 {
@@ -105,7 +105,13 @@ $ docker run --rm -it -v "${PWD}"/:/src/:ro \
 # To see a more complicated example change basic to complex
 ```
 
-#### Docker Compose
+</details>
+
+### Clean
+
+Stopping the container automatically removes it (`-rm`)
+
+## Docker Compose
 
 ```bash
 $ git clone https://github.com/unfor19/tfcoding.git
@@ -143,36 +149,26 @@ tfcoding    | }
 
 </details>
 
-### Mock AWS
+### Clean
+
+```bash
+$ make clean
+```
+
+## Mock AWS
 
 This feature relies on the open-source project [localstack](https://github.com/localstack/localstack), which means you can provision the [AWS core resources](https://github.com/localstack/localstack#overview), see [examples/mock-aws/](./examples/mock-aws/)
 
-#### IMPORTANT
 
-You might encounter the below warning after executing `docker-compose up` - **DO NOT** add the `--remove-orphans` flag
-
-> *WARNING: Found orphan containers (tfcoding, localstack) for this project. If you removed or renamed this service in your compose file, you can run this command with the --remove-orphans flag to clean it up.*
-
-Let's go!
+### Run
 
 ```bash
 $ git clone https://github.com/unfor19/tfcoding.git
 $ cd tfcoding
-$ docker-compose -p tfcoding -f docker-compose-localstack.yml up --detached
-$ docker-compose -p tfcoding -f docker-compose-aws.yml up
-...
-# Change something in examples/mock-aws/tfcoding.tf
-
-# Cleanup
-$ docker-compose -p tfcoding down -v --remove-orphans
-$ docker volume rm tfcoding_code_dir_tmp_aws tfcoding_plugins_cache_dir
-$ rm -r .localstack
-
-# If you're getting weird errors, simply remove the container
-$ docker rm tfcoding-aws
+$ make up-aws-localstack
 ```
 
-#### terraform destroy
+### terraform destroy
 
 To execute `terraform destroy` on changing `tfcoding.tf`, add the Local Value `terraform_destroy = true`. For example:
 
@@ -182,6 +178,49 @@ locals {
   terraform_destroy = true
 }
 ```
+
+### Clean
+
+```bash
+$ make clean-aws
+# OR
+$ make clean-localstack
+# OR
+$ make clean-aws-localstack
+```
+
+## Clean All
+
+Removes tfcoding, tfcoding-aws and localstack, including orphaned resources.
+
+```bash
+$ make clean-all
+```
+
+## Help Menu
+
+```bash
+$ make help
+# OR
+$ docker run --rm -it unfor19/tfcoding --help
+```
+
+<!-- replacer_start_helpmenu -->
+
+```bash
+Usage: bash entrypoint.sh -r basic/exmaples --watching -o private_subnets
+
+	--src_dir_relative_path  |  -r    [REQUIRED]  Relative path to the dir that contains tfcoding.tf
+	--single_value_output    |  -o    [all]       Render a single local variable
+	--src_dir_root           |  -s    [/src]      Source root dir in container
+	--logging                |  -l    [true]      Show logging messages
+	--debug                  |  -d    [false]     Print verbose output
+	--watching               |  -w    [FLAG]      Auto-render tfcoding.tf on change
+	--mock_aws               |  -aws  [FLAG]      Use this flag for communicating with Localstack
+```
+
+<!-- replacer_end_helpmenu -->
+
 
 ## Authors
 
