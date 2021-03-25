@@ -9,7 +9,7 @@ help:                ## Available make commands
 
 usage: help         
 
-build:               ## Build tfcoding Docker image - default: terraform v0.13.5
+build:               ## Build tfcoding Docker image - default: terraform v0.13.6
 	docker build -t $(DOCKER_TAG) \
 		--build-arg TERRAFORM_VERSION=$(TERRAFORM_VERSION) .
 
