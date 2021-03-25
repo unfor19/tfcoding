@@ -61,4 +61,4 @@ test:                ## Run tests
 	@./scripts/tests.sh
 
 
-clean-all: clean clean-aws-localstack
+clean-all:            clean clean-aws-localstack ##
