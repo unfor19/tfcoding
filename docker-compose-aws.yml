@@ -9,7 +9,7 @@ volumes:
 services:
   tfcoding-aws:
     container_name: tfcoding-aws
-    image: unfor19/tfcoding:latest
+    image: ${DOCKER_TAG:-unfor19/tfcoding:latest}
     volumes:
       - ./:/src/:ro
       - code_dir_tmp_aws:/tmp/
