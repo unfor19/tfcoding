@@ -1,7 +1,7 @@
 .EXPORT_ALL_VARIABLES:
-DOCKER_IMAGE_PREFIX ?= unfor19/tfcoding:latest
-TERRAFORM_VERSION ?= 0.13.5
-DOCKER_TAG ?= unfor19/tfcoding:latest-tf$(TERRAFORM_VERSION)
+TFCODING_VERSION ?= 0.0.8
+TERRAFORM_VERSION ?= 0.13.6
+DOCKER_TAG ?= unfor19/tfcoding:$(TERRAFORM_VERSION)-$(TFCODING_VERSION)
 SRC_DIR_RELATIVE_PATH ?= examples/basic
 
 help:               ## Available make commands
