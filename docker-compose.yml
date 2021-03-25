@@ -1,15 +1,12 @@
 version: "3.7"
 
-networks:
-  shared:
-
 volumes:
   code_dir_tmp:
 
 services:
   tfcoding:
     container_name: tfcoding
-    image: unfor19/tfcoding:latest
+    image: ${DOCKER_TAG:-unfor19/tfcoding:latest}
     volumes:
       - ./:/src/:ro
       - code_dir_tmp:/tmp/
@@ -19,5 +16,3 @@ services:
       - "--watching"
     restart: always
     tty: true # colorful output
-    networks:
-      - shared
