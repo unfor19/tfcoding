@@ -33,9 +33,12 @@ up-localstack:       ## Run localstack in Docker Compose
 	@docker-compose -p tfcoding_aws -f docker-compose-localstack.yml up --detach
 
 up-aws:              ## Run tfcoding-aws in Docker Compose
-	@docker-compose -p tfcoding_aws -f docker-compose-aws.yml up
+	@export SRC_DIR_RELATIVE_PATH="examples/mock-aws" && \
+	docker-compose -p tfcoding_aws -f docker-compose-aws.yml up
 
 up-aws-localstack:    up-localstack up-aws ##
+
+up-localstack-aws:    up-aws-localstack
 
 down-aws:            ## Stop tfcoding-aws in Docker Compose
 	@docker-compose -p tfcoding_aws -f docker-compose-aws.yml down
@@ -51,14 +54,17 @@ clean-localstack:    ## Clean localstack in Docker Compose
 clean-aws:           ## Clean tfcoding in Docker Compose
 	@docker-compose -p tfcoding_aws -f docker-compose-aws.yml down -v --remove-orphans
 	@docker rm -f tfcoding-aws 2>/dev/null || true
-	@docker volume rm tfcoding_code_dir_tmp_aws tfcoding_plugins_cache_dir 2>/dev/null || true
+	@docker volume rm tfcoding_aws_code_dir_tmp_aws tfcoding_aws_plugins_cache_dir 2>/dev/null || true
 
 down-aws-localstack:  down-aws down-localstack ##
 
+down-localstack-aws:  down-aws-localstack
+
 clean-aws-localstack: clean-aws clean-localstack ##
+
+clean-localstack-aws: clean-aws-localstack
 
 test:                ## Run tests
 	@./scripts/tests.sh
-
 
 clean-all:            clean clean-aws-localstack ##
