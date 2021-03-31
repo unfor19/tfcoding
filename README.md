@@ -116,7 +116,7 @@ Stopping the container automatically removes it (`-rm`)
 ```bash
 $ git clone https://github.com/unfor19/tfcoding.git
 $ cd tfcoding
-$ docker-compose up
+$ make up
 ```
 
 <details>
