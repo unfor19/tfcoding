@@ -4,7 +4,7 @@
 
 <img alt="tfcoding-logo" src="https://user-images.githubusercontent.com/15122452/111926094-22f28e80-8ab4-11eb-9a72-ca2394d6bb33.png" width="400" />
 
-![tfcoding](https://user-images.githubusercontent.com/15122452/111927698-4caeb400-8aba-11eb-9d80-a19ba48c6e6a.gif)
+![tfcoding](https://d33vo9sj4p3nyc.cloudfront.net/tfcoding/tfcoding-localstack-aws.gif)
 
 Render Terraform's [Expressions](https://www.terraform.io/docs/language/expressions/index.html) and [Functions](https://www.terraform.io/docs/language/functions/index.html) locally without any hassle.
 
