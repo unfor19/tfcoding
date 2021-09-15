@@ -19,9 +19,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.12.30"
+          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.12.31"
             DOCKERFILE_PATH: Dockerfile
-            TERRAFORM_VERSION: "0.12.30"
+            TERRAFORM_VERSION: "0.12.31"
           - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.13.6"
             DOCKERFILE_PATH: Dockerfile
             TERRAFORM_VERSION: "0.13.6"
@@ -81,11 +81,11 @@ jobs:
     strategy:
       matrix:
         include:
-          # 0.12.30-latest
-          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.12.30"
+          # 0.12.31-latest
+          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.12.31"
             DOCKERFILE_PATH: Dockerfile
-            TERRAFORM_VERSION: "0.12.30"
-            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.12.30-latest"
+            TERRAFORM_VERSION: "0.12.31"
+            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.12.31-latest"
           # 0.13.6-latest
           - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.13.6"
             DOCKERFILE_PATH: Dockerfile
