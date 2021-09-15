@@ -91,18 +91,13 @@ jobs:
             DOCKERFILE_PATH: Dockerfile
             TERRAFORM_VERSION: "0.13.6"
             DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.13.6-latest"
-          # latest (TERRAFORM_VERSION=0.13.6)
-          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.13.6"
-            DOCKERFILE_PATH: Dockerfile
-            TERRAFORM_VERSION: "0.13.6"
-            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:latest"
           # 0.14.8-latest
-          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.14.8-latest"
+          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.14.8"
             DOCKERFILE_PATH: Dockerfile
             TERRAFORM_VERSION: "0.14.8"
             DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.14.8-latest"
           # 0.15.0-beta2
-          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.15.0-beta2-latest"
+          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:0.15.0-beta2"
             DOCKERFILE_PATH: Dockerfile
             TERRAFORM_VERSION: "0.15.0-beta2"
             DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:0.15.0-beta2-latest"
@@ -111,6 +106,11 @@ jobs:
             DOCKERFILE_PATH: Dockerfile
             TERRAFORM_VERSION: "1.0.6"     
             DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:1.0.6-latest"
+          # latest (TERRAFORM_VERSION=1.0.6)
+          - GHCR_CACHED_TAG_PREFIX: "ghcr.io/unfor19/tfcoding:1.0.6"
+            DOCKERFILE_PATH: Dockerfile
+            TERRAFORM_VERSION: "1.0.6"
+            DOCKERHUB_TAG_PREFIX: "unfor19/tfcoding:latest"            
     steps:
       - uses: actions/checkout@v2
       - name: Inject slug/short variables
