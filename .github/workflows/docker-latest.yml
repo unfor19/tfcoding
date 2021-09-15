@@ -61,6 +61,7 @@ jobs:
             --cache-from="${{ matrix.GHCR_CACHED_TAG_PREFIX }}-${TARGET_APP}" \
             -f "${{ matrix.DOCKERFILE_PATH }}" \
             --target "${TARGET_APP}" \
+            --build-arg TERRAFORM_VERSION="$TERRAFORM_VERSION" \
             --build-arg BUILDKIT_INLINE_CACHE=1
       - name: docker tag cached
         run: |
