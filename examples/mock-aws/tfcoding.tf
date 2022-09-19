@@ -13,6 +13,7 @@ variable "cidr_ab" {
 
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
+  version = "~>3.14.4"
 
   name = local.base_name
   cidr = "${local.cidr_ab}.0.0/16"
