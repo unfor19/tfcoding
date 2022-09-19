@@ -47,7 +47,7 @@ jobs:
       - name: Docker Build
         uses: docker/build-push-action@v3
         with:
-          file: ${{ matrix.DOCKER_FILE_PATH }}
+          file: ${{ env.DOCKERFILE_PATH }}
           context: ${{ env.DOCKER_WORKDIR }}
           push: false
           platforms: linux/amd64
@@ -65,7 +65,7 @@ jobs:
       - name: Docker Build arm64 and Push
         uses: docker/build-push-action@v3
         with:
-          file: ${{ matrix.DOCKER_FILE_PATH }}
+          file: ${{ env.DOCKERFILE_PATH }}
           context: ${{ env.DOCKER_WORKDIR }}
           push: true
           platforms: linux/amd64,linux/arm64
