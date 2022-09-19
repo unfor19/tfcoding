@@ -7,6 +7,7 @@ services:
   tfcoding:
     container_name: tfcoding
     image: ${DOCKER_TAG:-unfor19/tfcoding:latest}
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
     volumes:
       - ./:/src/:ro
       - code_dir_tmp:/tmp/
