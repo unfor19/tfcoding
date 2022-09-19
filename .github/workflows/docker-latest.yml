@@ -62,3 +62,19 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Test
         run: make test
+      - name: Docker Build arm64 and Push
+        uses: docker/build-push-action@v3
+        with:
+          file: ${{ matrix.DOCKER_FILE_PATH }}
+          context: ${{ env.DOCKER_WORKDIR }}
+          push: true
+          platforms: linux/amd64,linux/arm64
+          target: app
+          build-args: |
+            TERRAFORM_VERSION=${{ matrix.TERRAFORM_VERSION }}
+          tags: |
+            ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-${{ env.GITHUB_REF_SLUG }}
+            ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-${{ env.GITHUB_SHA_SHORT }}
+          load: false # Must be false to push linux/arm64 images
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
