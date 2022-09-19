@@ -53,7 +53,7 @@ jobs:
           platforms: linux/amd64
           target: app
           build-args: |
-            TERRAFORM_VERSION=${{ matrix.TERRAFORM_VERSION }}
+            TERRAFORM_VERSION=${{ env.TERRAFORM_VERSION }}
           tags: |
             ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-${{ env.GITHUB_REF_SLUG }}
             ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-${{ env.GITHUB_SHA_SHORT }}
@@ -71,10 +71,27 @@ jobs:
           platforms: linux/amd64,linux/arm64
           target: app
           build-args: |
-            TERRAFORM_VERSION=${{ matrix.TERRAFORM_VERSION }}
+            TERRAFORM_VERSION=${{ env.TERRAFORM_VERSION }}
           tags: |
             ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-${{ env.GITHUB_REF_SLUG }}
             ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-${{ env.GITHUB_SHA_SHORT }}
+          load: false # Must be false to push linux/arm64 images
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Docker Build arm64 and Push
+        if: ${{ env.GITHUB_REF_SLUG == 'master' }}
+        uses: docker/build-push-action@v3
+        with:
+          file: ${{ env.DOCKERFILE_PATH }}
+          context: ${{ env.DOCKER_WORKDIR }}
+          push: true
+          platforms: linux/amd64,linux/arm64
+          target: app
+          build-args: |
+            TERRAFORM_VERSION=${{ env.TERRAFORM_VERSION }}
+          tags: |
+            ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-latest
+            ${{ env.DOCKERHUB_REPOSITORY }}:latest
           load: false # Must be false to push linux/arm64 images
           cache-from: type=gha
           cache-to: type=gha,mode=max
