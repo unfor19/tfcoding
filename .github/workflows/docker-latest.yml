@@ -62,7 +62,7 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Test
         run: make test
-      - name: Docker Build arm64 and Push
+      - name: Docker Build amd64 and load
         uses: docker/build-push-action@v3
         with:
           file: ${{ env.DOCKERFILE_PATH }}
