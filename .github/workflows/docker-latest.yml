@@ -8,7 +8,7 @@ on:
 env:
   TARGET_APP: app
   DOCKERHUB_REPOSITORY: docker.io/unfor19/tfcoding
-  TFCODING_VERSION: 0.0.9
+  TFCODING_VERSION: 0.0.10
 
 jobs:
   build-push:
