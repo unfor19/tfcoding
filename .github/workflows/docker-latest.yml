@@ -42,7 +42,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Docker Build linux/amd64 for Tests
+      - name: Build - amd64 for running Test
         uses: docker/build-push-action@v5.1.0
         with:
           file: Dockerfile
@@ -60,7 +60,7 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Test
         run: make test
-      - name: Side Branch - Docker Build arm64 and push both arm64 and amd64
+      - name: Side Branch - Build - arm64, Push - arm64,amd64
         if: env.GIT_REF_SLUG != 'master'
         uses: docker/build-push-action@v5.1.0
         with:
@@ -77,7 +77,7 @@ jobs:
           load: false # Must be false to push linux/arm64 images
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      - name: Latest - Docker Build arm64 and push both arm64 and amd64
+      - name: Latest master - Build - arm64, Push - arm64,amd64
         if: env.GIT_REF_SLUG == 'master'
         uses: docker/build-push-action@v5.1.0
         with:
@@ -94,7 +94,7 @@ jobs:
           load: false # Must be false to push linux/arm64 images
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      - name: Latest - Docker Build arm64 and push both arm64 and amd64
+      - name: Latest Tag - Build - arm64, Push - arm64,amd64
         if: env.GIT_REF_SLUG == 'master' && env.TERRAFORM_VERSION == '1.6.6'
         uses: docker/build-push-action@v5.1.0
         with:
@@ -107,6 +107,7 @@ jobs:
             TERRAFORM_VERSION=${{ env.TERRAFORM_VERSION }}
           tags: |
             ${{ env.DOCKERHUB_REPOSITORY }}:latest
+            ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}
             ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-${{ env.TERRAFORM_VERSION }}
           load: false # Must be false to push linux/arm64 images
           cache-from: type=gha
