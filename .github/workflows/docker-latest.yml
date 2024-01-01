@@ -61,7 +61,7 @@ jobs:
       - name: Test
         run: make test
       - name: Side Branch - Build - arm64, Push - arm64,amd64
-        if: env.GIT_REF_SLUG != 'master'
+        if: github.ref != 'refs/heads/master'
         uses: docker/build-push-action@v5.1.0
         with:
           file: Dockerfile
@@ -78,7 +78,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Latest master - Build - arm64, Push - arm64,amd64
-        if: env.GIT_REF_SLUG == 'master'
+        if: github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v5.1.0
         with:
           file: Dockerfile
@@ -95,7 +95,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Latest Tag - Build - arm64, Push - arm64,amd64
-        if: env.GIT_REF_SLUG == 'master' && env.TERRAFORM_VERSION == '1.6.6'
+        if: github.ref == 'refs/heads/master' && env.TERRAFORM_VERSION == '1.6.6'
         uses: docker/build-push-action@v5.1.0
         with:
           file: Dockerfile
