@@ -19,9 +19,13 @@ jobs:
       matrix:
         include:
           - DOCKERFILE_PATH: Dockerfile
+            TERRAFORM_VERSION: "1.4.6"
+          - DOCKERFILE_PATH: Dockerfile
             TERRAFORM_VERSION: "1.5.5"
           - DOCKERFILE_PATH: Dockerfile
             TERRAFORM_VERSION: "1.6.6"
+          - DOCKERFILE_PATH: Dockerfile
+            TERRAFORM_VERSION: "1.7.0-rc1"
     env:
       DOCKERFILE_PATH: ${{ matrix.DOCKERFILE_PATH }}
       TERRAFORM_VERSION: ${{ matrix.TERRAFORM_VERSION }}
