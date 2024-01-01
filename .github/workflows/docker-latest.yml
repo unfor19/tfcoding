@@ -60,8 +60,9 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Test
         run: make test
-      - name: Docker Build arm64 and push both arm64 and amd64
-        uses: docker/build-push-action@v3
+      - name: Side Branch - Docker Build arm64 and push both arm64 and amd64
+        if: env.GIT_REF_SLUG != 'master'
+        uses: docker/build-push-action@v5.1.0
         with:
           file: Dockerfile
           context: .
@@ -73,6 +74,40 @@ jobs:
           tags: |
             ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-${{ env.GITHUB_REF_SLUG }}
             ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-${{ env.GITHUB_SHA_SHORT }}
+          load: false # Must be false to push linux/arm64 images
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Latest - Docker Build arm64 and push both arm64 and amd64
+        if: env.GIT_REF_SLUG == 'master'
+        uses: docker/build-push-action@v5.1.0
+        with:
+          file: Dockerfile
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          target: app
+          build-args: |
+            TERRAFORM_VERSION=${{ env.TERRAFORM_VERSION }}
+          tags: |
+            ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-${{ env.TERRAFORM_VERSION }}
+            ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-${{ env.GITHUB_SHA_SHORT }}
+          load: false # Must be false to push linux/arm64 images
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Latest - Docker Build arm64 and push both arm64 and amd64
+        if: env.GIT_REF_SLUG == 'master' && env.TERRAFORM_VERSION == '1.6.6'
+        uses: docker/build-push-action@v5.1.0
+        with:
+          file: Dockerfile
+          context: .
+          push: true
+          platforms: linux/amd64,linux/arm64
+          target: app
+          build-args: |
+            TERRAFORM_VERSION=${{ env.TERRAFORM_VERSION }}
+          tags: |
+            ${{ env.DOCKERHUB_REPOSITORY }}:latest
+            ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-${{ env.TERRAFORM_VERSION }}
           load: false # Must be false to push linux/arm64 images
           cache-from: type=gha
           cache-to: type=gha,mode=max
