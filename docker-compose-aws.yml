@@ -9,12 +9,14 @@ volumes:
 services:
   tfcoding-aws:
     container_name: tfcoding-aws
+    platform: linux/${DOCKER_PLATFORM:-amd64}
     image: ${DOCKER_TAG:-unfor19/tfcoding:latest}
-    platform: ${DOCKER_PLATFORM:-linux/amd64}
     volumes:
       - ./:/src/:ro
-      - code_dir_tmp_aws:/tmp/
-
+      - ${HOME}/.aws:/home/appuser/.aws:ro
+    environment:
+      AWS_REGION: "us-east-1"
+      AWS_DEFAULT_REGION: "us-east-1"
     command:
       - "--src_dir_relative_path"
       - "${SRC_DIR_RELATIVE_PATH:-examples/mock-aws}"

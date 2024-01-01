@@ -12,8 +12,8 @@ variable "cidr_ab" {
 }
 
 module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
-  version = "~>3.14.4"
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~>5.4.0"
 
   name = local.base_name
   cidr = "${local.cidr_ab}.0.0/16"
@@ -29,7 +29,7 @@ module "vpc" {
 locals {
   # terraform_destroy = true
   base_name = "myapp"
-  cidr_ab = lookup(var.cidr_ab, var.environment)
+  cidr_ab   = lookup(var.cidr_ab, var.environment)
   private_subnets = [
     "${local.cidr_ab}.0.0/24",
     "${local.cidr_ab}.1.0/24",
