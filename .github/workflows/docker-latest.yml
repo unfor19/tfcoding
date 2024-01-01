@@ -19,36 +19,30 @@ jobs:
       matrix:
         include:
           - DOCKERFILE_PATH: Dockerfile
-            TERRAFORM_VERSION: "0.13.6"
+            TERRAFORM_VERSION: "1.5.5"
           - DOCKERFILE_PATH: Dockerfile
-            TERRAFORM_VERSION: "0.14.8"
-          - DOCKERFILE_PATH: Dockerfile
-            TERRAFORM_VERSION: "0.15.0-beta2"
-          - DOCKERFILE_PATH: Dockerfile
-            TERRAFORM_VERSION: "1.0.6"
-          - DOCKERFILE_PATH: Dockerfile
-            TERRAFORM_VERSION: "1.2.9"
+            TERRAFORM_VERSION: "1.6.6"
     env:
       DOCKERFILE_PATH: ${{ matrix.DOCKERFILE_PATH }}
       TERRAFORM_VERSION: ${{ matrix.TERRAFORM_VERSION }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.1.1
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3.0.0
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3.0.0
       - name: Login to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3.0.0
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Docker Build
-        uses: docker/build-push-action@v3
+      - name: Docker Build linux/amd64 for Tests
+        uses: docker/build-push-action@v5.1.0
         with:
-          file: ${{ env.DOCKERFILE_PATH }}
-          context: ${{ env.DOCKER_WORKDIR }}
+          file: Dockerfile
+          context: .
           push: false
           platforms: linux/amd64
           target: app
@@ -62,11 +56,11 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Test
         run: make test
-      - name: Docker Build amd64 and load
+      - name: Docker Build arm64 and push both arm64 and amd64
         uses: docker/build-push-action@v3
         with:
-          file: ${{ env.DOCKERFILE_PATH }}
-          context: ${{ env.DOCKER_WORKDIR }}
+          file: Dockerfile
+          context: .
           push: true
           platforms: linux/amd64,linux/arm64
           target: app
@@ -75,23 +69,6 @@ jobs:
           tags: |
             ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-${{ env.GITHUB_REF_SLUG }}
             ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-${{ env.GITHUB_SHA_SHORT }}
-          load: false # Must be false to push linux/arm64 images
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-      - name: Docker Build arm64 and Push
-        if: ${{ env.GITHUB_REF_SLUG == 'master' }}
-        uses: docker/build-push-action@v3
-        with:
-          file: ${{ env.DOCKERFILE_PATH }}
-          context: ${{ env.DOCKER_WORKDIR }}
-          push: true
-          platforms: linux/amd64,linux/arm64
-          target: app
-          build-args: |
-            TERRAFORM_VERSION=${{ env.TERRAFORM_VERSION }}
-          tags: |
-            ${{ env.DOCKERHUB_REPOSITORY }}:${{ env.TFCODING_VERSION }}-latest
-            ${{ env.DOCKERHUB_REPOSITORY }}:latest
           load: false # Must be false to push linux/arm64 images
           cache-from: type=gha
           cache-to: type=gha,mode=max

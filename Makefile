@@ -4,7 +4,6 @@ TERRAFORM_VERSION ?= 1.6.6
 DOCKER_TAG ?= unfor19/tfcoding:$(TERRAFORM_VERSION)-$(TFCODING_VERSION)
 SRC_DIR_RELATIVE_PATH ?= examples/basic
 DOCKER_PLATFORM:=$(shell arch)
-OS_ARCH:=${DOCKER_PLATFORM}
 
 help:                ## Available make commands
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's~:~~' | sed -e 's~##~~'
