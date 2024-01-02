@@ -10,7 +10,7 @@ services:
   tfcoding-aws:
     container_name: tfcoding-aws
     platform: linux/${DOCKER_PLATFORM:-amd64}
-    image: ${DOCKER_TAG:-unfor19/tfcoding:latest}
+    image: ${DOCKER_TAG_LATEST:-unfor19/tfcoding:latest}
     volumes:
       - ./:/src/:ro
       - ${HOME}/.aws:/home/appuser/.aws:ro

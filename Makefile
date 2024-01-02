@@ -22,7 +22,7 @@ build:               ## Build tfcoding Docker image - default: terraform v0.13.6
 run:                 ## Run tfcoding in Docker
 	docker run --rm -it \
 	-v ${PWD}/:/src/:ro \
-	$(DOCKER_TAG) -r $(SRC_DIR_RELATIVE_PATH) --watching
+	$(DOCKER_TAG_LATEST) -r $(SRC_DIR_RELATIVE_PATH) --watching
 
 up:                  ## Run tfcoding in Docker Compose
 	@docker-compose -p tfcoding up
