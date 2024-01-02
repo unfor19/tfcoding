@@ -15,7 +15,7 @@ ARG FSWATCH_VERSION
 
 ENV OS_ARCH="amd64"
 WORKDIR /downloads/
-RUN if "$(uname -m)" = "aarch64" ; then export OS_ARCH=arm64; fi && \
+RUN if [ "$(uname -m)" = "aarch64" ]; then export OS_ARCH=arm64; fi && \
     apk add --no-cache unzip curl && \
     curl -sL -o terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_${OS_ARCH}.zip" && \
     unzip terraform.zip && rm terraform.zip && \
