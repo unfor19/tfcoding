@@ -7,7 +7,7 @@ networks:
 services:
   localstack:
     container_name: localstack
-    image: localstack/localstack:${LOCALSTACK_VERSION:-3.0.2}
+    image: localstack/localstack:${LOCALSTACK_VERSION:-latest}
     platform: linux/${DOCKER_PLATFORM:-amd64}
     ports:
       - "4566:4566"
