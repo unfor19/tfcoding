@@ -105,11 +105,46 @@ Containers = {
             "--watching",
             "--mock_aws"]
     ),
+    "code-server": kubernetes.core.v1.ContainerArgs(
+        name="code-server",
+        working_dir="/home/coder/project",
+        image="codercom/code-server:latest",
+        security_context=kubernetes.core.v1.SecurityContextArgs(
+            run_as_user=1000,  # appuser
+            capabilities=kubernetes.core.v1.CapabilitiesArgs(
+                drop=["all"]
+            )
+        ),
+        ports=[
+            kubernetes.core.v1.ContainerPortArgs(
+                container_port=8080,
+            )
+        ],
+        args=[
+            "--app-name",
+            "tfcoding-playground",
+            "--auth",
+            "none",
+        ],
+        volume_mounts=[
+            kubernetes.core.v1.VolumeMountArgs(
+                mount_path="/home/coder/project",
+                name=constants.WORKDIR_VOLUME_NAME,
+                read_only=False,
+                sub_path="tfcoding/examples/mock-aws-pulumi",
+            )
+        ],
+    ),
     "loki": kubernetes.core.v1.ContainerArgs(
         name="loki",
         image="grafana/loki:latest",
         args=[
             "-config.file=/etc/loki/local-config.yaml"
+        ],
+        ports=[
+            kubernetes.core.v1.ContainerPortArgs(
+                container_port=3100,
+            )
         ],
         volume_mounts=[
             kubernetes.core.v1.VolumeMountArgs(
