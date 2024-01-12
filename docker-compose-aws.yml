@@ -1,16 +1,32 @@
-version: "3.7"
+version: "3.9"
 
 networks:
   shared:
-
-volumes:
-  code_dir_tmp_aws:
+    name: shared
 
 services:
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:${LOCALSTACK_VERSION:-3.0.2}
+    platform: linux/${DOCKER_PLATFORM:-amd64}
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+    environment:
+      DEBUG: "true"
+      LAMBDA_DOCKER_NETWORK: shared
+      MAIN_DOCKER_NETWORK: shared
+      DOCKER_HOST: unix:///var/run/docker.sock
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - shared
+
   tfcoding-aws:
     container_name: tfcoding-aws
     platform: linux/${DOCKER_PLATFORM:-amd64}
     image: ${DOCKER_TAG_LATEST:-unfor19/tfcoding:latest}
+    pull_policy: always
     volumes:
       - ./:/src/:ro
       - ${HOME}/.aws:/home/appuser/.aws:ro

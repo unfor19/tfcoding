@@ -76,7 +76,7 @@ This project uses [localstack](https://github.com/localstack/localstack), which 
    ```
 1. Render [examples/mock-aws/tfcoding.tf](./examples/mock-aws/tfcoding.tf) - Make changes in that file, like changing the CIDR of subnets
    ```
-   make up-aws-localstack
+   make up-aws
    ```
 1. Execute `terraform destroy` on changing `tfcoding.tf`, add the Local Value `terraform_destroy = true`. For example:
 
