@@ -16,7 +16,9 @@ usage: help
 
 
 build:               ## Build tfcoding Docker image - default: terraform v0.13.6
-	docker build --platform linux/${DOCKER_PLATFORM} -t $(DOCKER_TAG) -t ${DOCKER_TAG_LATEST} \
+	docker build --platform linux/${DOCKER_PLATFORM} \
+		--progress=plain \
+		-t $(DOCKER_TAG) -t ${DOCKER_TAG_LATEST} \
 		--build-arg TERRAFORM_VERSION=$(TERRAFORM_VERSION) \
 		--build-arg OS_ARCH=${OS_ARCH} .
 
