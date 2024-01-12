@@ -13,17 +13,34 @@ services:
       - "4566:4566"
       - "4571:4571"
     environment:
-      DEBUG: "true"
+      DEBUG: ${DEBUG:-0}
+      LS_LOG: ${LS_LOG:-error}
       LAMBDA_DOCKER_NETWORK: shared
       MAIN_DOCKER_NETWORK: shared
       DOCKER_HOST: unix:///var/run/docker.sock
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./localstack/healthcheck-init.sh:/etc/localstack/init/ready.d/healthcheck-init.sh"
     networks:
       - shared
+    healthcheck:
+      test:
+        - CMD
+        - bash
+        - -c
+        - curl -f http://localhost:4566/_localstack/init/ready | jq .completed==true || exit 1
+      interval: 1s
+      timeout: 5s
+      start_period: 2s
+      retries: 5
 
   tfcoding-aws:
     container_name: tfcoding-aws
+    depends_on:
+      localstack:
+        condition: service_healthy
+        restart: true
+    restart: always
     platform: linux/${DOCKER_PLATFORM:-amd64}
     image: ${DOCKER_TAG_LATEST:-unfor19/tfcoding:latest}
     volumes:
@@ -37,7 +54,6 @@ services:
       - "${SRC_DIR_RELATIVE_PATH:-examples/mock-aws}"
       - "--watching"
       - "--mock_aws"
-    restart: always
     tty: true # colorful output
     networks:
       - shared
