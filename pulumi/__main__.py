@@ -54,9 +54,11 @@ webserverdeployment = kubernetes.apps.v1.Deployment(
                         image="unfor19/tfcoding:latest",
                         working_dir=workdirPath,
                         name="prepare",
-                        command=["chmod", "+x"],
+                        command=["bash", "-c"],
                         args=[
-                            "localstack/healthcheck-init.sh"],
+                            "git checkout feature/kubernetes && \
+                                chmod +x localstack/healthcheck-init.sh"
+                        ],
                         volume_mounts=[
                             kubernetes.core.v1.VolumeMountArgs(
                                 name="workdir-volume",
@@ -69,13 +71,40 @@ webserverdeployment = kubernetes.apps.v1.Deployment(
                     )
                 ],
                 containers=[
-                    # kubernetes.core.v1.ContainerArgs(
-                    #     image="unfor19/tfcoding:latest",
-                    #     name="tfcoding",
-                    # ),
+                    kubernetes.core.v1.ContainerArgs(
+                        image="unfor19/tfcoding:latest",
+                        name="tfcoding",
+                        env=[
+                            kubernetes.core.v1.EnvVarArgs(
+                                name="AWS_REGION",
+                                value="us-east-1"
+                            ),
+                            kubernetes.core.v1.EnvVarArgs(
+                                name="AWS_DEFAULT_REGION",
+                                value="us-east-1"
+                            )
+                        ],
+                        volume_mounts=[
+                            kubernetes.core.v1.VolumeMountArgs(
+                                mount_path="/src",
+                                name="workdir-volume",
+                                read_only=False,
+                                sub_path="tfcoding",
+                            )
+                        ],
+                        args=[
+                            "--src_dir_relative_path",
+                            "examples/mock-aws-pulumi",
+                            "--watching",
+                            "--mock_aws"]
+                    ),
                     kubernetes.core.v1.ContainerArgs(
                         image="localstack/localstack:latest",
                         name="localstack",
+                        env=[kubernetes.core.v1.EnvVarArgs(
+                            name="LS_LOG",
+                            value="error"
+                        )],
                         ports=[
                             kubernetes.core.v1.ContainerPortArgs(
                                 container_port=4566,
