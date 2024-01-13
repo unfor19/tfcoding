@@ -181,8 +181,8 @@ deployment:
     workdir-volume:
       mountPath: "/home/coder/project"
       name: workdir-volume
-      read_only: False
-      sub_path: "tfcoding/examples/mock-aws-pulumi"
+      readOnly: false
+      subPath: "tfcoding/examples/mock-aws-pulumi"
 
     # volume-name-2:
     #    mountPath: path-2
