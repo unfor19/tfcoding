@@ -230,16 +230,18 @@ deployment:
   revisionHistoryLimit: 3
 
   # Image of the app container
-  name: "code-server"
-  working_dir: "/home/coder/project"
-  image: "codercom/code-server"
+  name: code-server
+  # Image of the app container
+  image:
+    repository: codercom/code-server
+    tag: latest
+    digest: "" # if set to a non empty value, digest takes precedence on the tag
+    pullPolicy: IfNotPresent
   security_context:
     run_as_user: 1000 # appuser
     capabilities:
       drop: ["all"]
-  tag: latest
-  digest: "" # if set to a non empty value, digest takes precedence on the tag
-  pullPolicy: IfNotPresent
+
   dnsConfig:
     # options:
     # - name: ndots
