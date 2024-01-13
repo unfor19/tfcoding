@@ -101,7 +101,7 @@ deployment:
     #   timeFormat: world
 
   # Replicas to be created
-  replicas:
+  replicas: 1
 
   # Secrets used to pull image
   imagePullSecrets: ""
@@ -212,7 +212,7 @@ deployment:
     tcpSocket: {}
 
   readinessProbe:
-    enabled: false
+    enabled: true
     failureThreshold: 3
     periodSeconds: 10
     successThreshold: 1
@@ -220,7 +220,8 @@ deployment:
     initialDelaySeconds: 10
     # Must specify either one of the following field when enabled
     httpGet: {}
-    exec: {}
+    exec:
+      command: ["ls", "/home/appuser"]
     tcpSocket: {}
 
   livenessProbe:
