@@ -186,7 +186,7 @@ deployment:
       mountPath: /home/appuser/.terraform.d/plugin-cache
       readOnly: false
     tfcoding-tmp-volume:
-      mountPath: /tmp
+      mountPath: /tmp/.terraform
       readOnly: false
 
     # volume-name-2:
