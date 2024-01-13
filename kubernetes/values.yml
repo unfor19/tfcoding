@@ -130,6 +130,10 @@ deployment:
 
   # Volumes to be added to the pod
   volumes:
+    workdir-volume:
+      emptyDir:
+        name: workdir-volume
+        sizeLimit: 500Mi
   #     configmap-volume:
   #       configMap:
   #         name: '{{ template "application.name" . }}-configmap-nameSuffix'
