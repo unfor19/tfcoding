@@ -179,15 +179,10 @@ deployment:
   # Mount path for Volumes
   volumeMounts:
     workdir-volume:
-      mountPath: /src
-      subPath: tfcoding
-      readOnly: false
-    tfcoding-terraform-cache-volume:
-      mountPath: /home/appuser/.terraform.d/plugin-cache
-      readOnly: false
-    tfcoding-tmp-volume:
-      mountPath: /tmp/.terraform
-      readOnly: false
+      mountPath: "/home/coder/project"
+      name: workdir-volume
+      read_only: False
+      sub_path: "tfcoding/examples/mock-aws-pulumi"
 
     # volume-name-2:
     #    mountPath: path-2
@@ -235,11 +230,16 @@ deployment:
   revisionHistoryLimit: 3
 
   # Image of the app container
-  image:
-    repository: unfor19/tfcoding
-    tag: latest
-    digest: "" # if set to a non empty value, digest takes precedence on the tag
-    pullPolicy: IfNotPresent
+  name: "code-server"
+  working_dir: "/home/coder/project"
+  image: "codercom/code-server"
+  security_context:
+    run_as_user: 1000  # appuser
+    capabilities:
+      drop: ["all"]
+  tag: latest
+  digest: "" # if set to a non empty value, digest takes precedence on the tag
+  pullPolicy: IfNotPresent
   dnsConfig:
     # options:
     # - name: ndots
@@ -255,7 +255,7 @@ deployment:
     tcpSocket: {}
 
   readinessProbe:
-    enabled: false
+    enabled: true
     failureThreshold: 3
     periodSeconds: 10
     successThreshold: 1
@@ -264,7 +264,7 @@ deployment:
     # Must specify either one of the following field when enabled
     httpGet: {}
     exec:
-      command: ["ls", "/"]
+      command: ["curl", "-sL", "http://localhost:8080/healthz"]
     tcpSocket: {}
 
   livenessProbe:
@@ -324,6 +324,26 @@ deployment:
           name: workdir-volume
           readOnly: false
           subPath: tfcoding/localstack/healthcheck-init.sh
+    - name: tfcoding
+      image: unfor19/tfcoding:latest
+      volumeMounts:
+        - name: workdir-volume
+          mountPath: /src
+          subPath: tfcoding
+          readOnly: false
+        - name: tfcoding-terraform-cache-volume
+          mountPath: /home/appuser/.terraform.d/plugin-cache
+          readOnly: false
+        - name: tfcoding-tmp-volume
+          mountPath: /tmp/.terraform
+          readOnly: false
+      args:
+      [
+        "--src_dir_relative_path",
+        "examples/mock-aws-pulumi",
+        "--watching",
+        "--mock_aws",
+      ]
 
   # Security Context for the pod
   securityContext:
@@ -337,18 +357,16 @@ deployment:
 
   # Args for primary contaner
   args:
-    [
-      "--src_dir_relative_path",
-      "examples/mock-aws-pulumi",
-      "--watching",
-      "--mock_aws",
-    ]
+    - "--app-name"
+    - "tfcoding-playground"
+    - "--auth"
+    - "none"
 
   # List of ports for the primary container
   ports:
-  #- containerPort: 8080
-  #  name: http
-  #  protocol: TCP
+    - containerPort: 8080
+      name: http
+      protocol: TCP
   #- containerPort: 8778
   #  name: jolokia
   #  protocol: TCP
