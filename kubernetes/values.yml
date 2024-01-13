@@ -289,10 +289,27 @@ deployment:
     disableTLSArg: false # If disabled --http-address=:8081 will be used instead of --https-address=:8443 , to be used when an ingress is used for application
   # Add additional containers besides init and app containers
   additionalContainers:
-  # - name: sidecar-contaner
-  #   image: busybox
-  #   imagePullPolicy: IfNotPresent
-  #   command: ['/bin/sh']
+    - name: localstack
+      image: localstack/localstack:latest
+      env:
+        - name: LS_LOG
+          value: error
+      ports:
+        - containerPort: 4566
+        - containerPort: 4571
+      readinessProbe:
+        exec:
+          command:
+            - /bin/bash
+            - -c
+            - curl -s http://localhost:4566/_localstack/init/ready | jq -r .completed==true || exit 1
+        initialDelaySeconds: 5
+        periodSeconds: 5
+      volumeMounts:
+        - mountPath: /etc/localstack/init/ready.d/healthcheck-init.sh
+          name: workdir-volume
+          readOnly: false
+          subPath: tfcoding/localstack/healthcheck-init.sh
 
   # Security Context for the pod
   securityContext:
