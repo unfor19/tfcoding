@@ -246,10 +246,10 @@ deployment:
 
   #  Security Context at Container Level
   containerSecurityContext:
-    readOnlyRootFilesystem: true
+    # readOnlyRootFilesystem: true
     runAsNonRoot: false
-    runAsUser: appuser
-    fsGroup: appgroup
+    runAsUser: 1000
+    fsGroup: 1000
 
   openshiftOAuthProxy:
     enabled: false
