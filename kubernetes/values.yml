@@ -171,7 +171,7 @@ deployment:
   # Mount path for Volumes
   volumeMounts:
     workdir-volume:
-      mountPath: /home/appuser
+      mountPath: /src
       subPath: tfcoding
       readOnly: false
 
