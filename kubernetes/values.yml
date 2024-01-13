@@ -234,7 +234,7 @@ deployment:
   working_dir: "/home/coder/project"
   image: "codercom/code-server"
   security_context:
-    run_as_user: 1000  # appuser
+    run_as_user: 1000 # appuser
     capabilities:
       drop: ["all"]
   tag: latest
@@ -338,12 +338,10 @@ deployment:
           mountPath: /tmp/.terraform
           readOnly: false
       args:
-      [
-        "--src_dir_relative_path",
-        "examples/mock-aws-pulumi",
-        "--watching",
-        "--mock_aws",
-      ]
+        - "--src_dir_relative_path"
+        - "examples/mock-aws-pulumi"
+        - "--watching"
+        - "--mock_aws"
 
   # Security Context for the pod
   securityContext:
