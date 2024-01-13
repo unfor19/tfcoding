@@ -249,6 +249,7 @@ deployment:
     readOnlyRootFilesystem: true
     runAsNonRoot: false
     runAsUser: 1000
+    fsGroup: 1000
 
   openshiftOAuthProxy:
     enabled: false
@@ -265,8 +266,10 @@ deployment:
 
   # Security Context for the pod
   securityContext:
-    # fsGroup: 2000
-    runAsUser: 1000
+    # fsGroup: 1000
+    # runAsUser: 1000
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: false
 
   # Command for primary container
   command: []
