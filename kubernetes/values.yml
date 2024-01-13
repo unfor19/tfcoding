@@ -157,7 +157,15 @@ deployment:
     workdir-volume:
       emptyDir:
         name: workdir-volume
-        sizeLimit: 1Gi
+        sizeLimit: 200Mi
+    tfcoding-terraform-cache-volume:
+      emptyDir:
+        name: tfcoding-terraform-cache-volume
+        sizeLimit: 100Mi
+    tfcoding-tmp-volume:
+      emptyDir:
+        name: tfcoding-tmp-volume
+        sizeLimit: 300Mi
   #     configmap-volume:
   #       configMap:
   #         name: '{{ template "application.name" . }}-configmap-nameSuffix'
@@ -173,6 +181,12 @@ deployment:
     workdir-volume:
       mountPath: /src
       subPath: tfcoding
+      readOnly: false
+    tfcoding-terraform-cache-volume:
+      mountPath: /home/appuser/.terraform.d/plugin-cache
+      readOnly: false
+    tfcoding-tmp-volume:
+      mountPath: /tmp
       readOnly: false
 
     # volume-name-2:
