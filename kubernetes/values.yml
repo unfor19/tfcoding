@@ -276,7 +276,7 @@ deployment:
 
   #  Security Context at Container Level
   containerSecurityContext:
-    # readOnlyRootFilesystem: true
+    readOnlyRootFilesystem: false
     runAsNonRoot: false
     runAsUser: 1000
     fsGroup: 1000
