@@ -4,6 +4,9 @@ on:
   push:
     paths-ignore:
       - "README.md"
+    # TODO: Remove
+    branches-ignore:
+      - "feature/kubernetes"
 
 env:
   TARGET_APP: app
