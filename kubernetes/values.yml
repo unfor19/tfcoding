@@ -250,7 +250,7 @@ deployment:
     # Must specify either one of the following field when enabled
     httpGet: {}
     exec:
-      command: ["ls", "/home/appuser"]
+      command: ["ls", "/"]
     tcpSocket: {}
 
   livenessProbe:
