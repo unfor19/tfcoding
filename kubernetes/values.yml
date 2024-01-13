@@ -74,6 +74,28 @@ deployment:
 
   # Init containers which runs before the app container
   initContainers:
+    git:
+      name: git
+      image: unfor19/tfcoding:latest
+      command: ["git", "clone"]
+      args: ["https://github.com/unfor19/tfcoding.git"]
+      workingDir: /home/appuser
+      volumeMounts:
+        - name: workdir-volume
+          mountPath: /home/appuser
+    prepare:
+      image: unfor19/tfcoding:latest
+      command: ["bash", "-c"]
+      args:
+        [
+          "git checkout feature/kubernetes && chmod +x localstack/healthcheck-init.sh",
+        ]
+      workingDir: /path/to/workdir # Replace with the actual workdir path
+      volumeMounts:
+        - name: workdir-volume # Replace with the actual volume name
+          mountPath: /path/to/workdir # Replace with the actual workdir path
+          subPath: tfcoding
+
   #      init-contaner:
   #        image: busybox
   #        imagePullPolicy: IfNotPresent
@@ -133,7 +155,7 @@ deployment:
     workdir-volume:
       emptyDir:
         name: workdir-volume
-        sizeLimit: 500Mi
+        sizeLimit: 1Gi
   #     configmap-volume:
   #       configMap:
   #         name: '{{ template "application.name" . }}-configmap-nameSuffix'
@@ -146,9 +168,10 @@ deployment:
 
   # Mount path for Volumes
   volumeMounts:
-    # volume-name:
-    #    mountPath: path
-    #    subPath: szy
+    workdir-volume:
+      mountPath: /home/appuser
+      subPath: tfcoding
+      readOnly: false
 
     # volume-name-2:
     #    mountPath: path-2
@@ -280,7 +303,13 @@ deployment:
   command: []
 
   # Args for primary contaner
-  args: []
+  args:
+    [
+      "--src_dir_relative_path",
+      "examples/mock-aws-pulumi",
+      "--watching",
+      "--mock_aws",
+    ]
 
   # List of ports for the primary container
   ports:
