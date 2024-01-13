@@ -263,9 +263,9 @@ deployment:
   #   command: ['/bin/sh']
 
   # Security Context for the pod
-
   securityContext:
     # fsGroup: 2000
+    runAsUser: 1000
 
   # Command for primary container
   command: []
