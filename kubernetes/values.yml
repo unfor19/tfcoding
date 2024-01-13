@@ -83,6 +83,7 @@ deployment:
       volumeMounts:
         - name: workdir-volume
           mountPath: /home/appuser
+          readOnly: false
     prepare:
       image: unfor19/tfcoding:latest
       command: ["bash", "-c"]
@@ -95,6 +96,7 @@ deployment:
         - name: workdir-volume # Replace with the actual volume name
           mountPath: /path/to/workdir # Replace with the actual workdir path
           subPath: tfcoding
+          readOnly: false
 
   #      init-contaner:
   #        image: busybox
