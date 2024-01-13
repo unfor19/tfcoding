@@ -91,10 +91,10 @@ deployment:
         [
           "git checkout feature/kubernetes && chmod +x localstack/healthcheck-init.sh",
         ]
-      workingDir: /path/to/workdir # Replace with the actual workdir path
+      workingDir: /home/appuser
       volumeMounts:
-        - name: workdir-volume # Replace with the actual volume name
-          mountPath: /path/to/workdir # Replace with the actual workdir path
+        - name: workdir-volume
+          mountPath: /home/appuser
           subPath: tfcoding
           readOnly: false
 
