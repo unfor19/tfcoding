@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tfcoding-helm-repo-secret
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+type: Opaque
+stringData:
+  url: https://github.com/unfor19/tfcoding.git
+  name: helm-app
+  type: helm
+  path: helm-app

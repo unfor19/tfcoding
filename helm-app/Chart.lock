@@ -1,0 +1,6 @@
+dependencies:
+- name: application
+  repository: https://stakater.github.io/stakater-charts
+  version: 2.3.2
+digest: sha256:0aec5e9344733891dc493468bcdcda4ffe057f16b90c5fd0335d6dc6c3ccc2b1
+generated: "2024-01-14T01:35:28.333802+02:00"

@@ -56,8 +56,15 @@ log_msg(){
 # trap ctrl-c and call ctrl_c()
 trap ctrl_c INT
 ctrl_c() {
-    log_msg "Stopped"
+    log_msg "Stopped with CTRL+C"
     exit 0
+}
+
+# trap container stopped and
+trap container_stopped SIGINT SIGTERM SIGHUP
+container_stopped() {
+    log_msg "Continaer Stopped By Orchestrator"
+    exit 2
 }
 
 
