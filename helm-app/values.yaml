@@ -329,6 +329,7 @@ application:
             subPath: tfcoding/localstack/healthcheck-init.sh
       - name: tfcoding
         image: unfor19/tfcoding:latest
+        pullPolicy: Always
         volumeMounts:
           - name: workdir-volume
             mountPath: /src
